@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SECLICA | Servicios</title>
+  <link rel="shortcut icon" href="images/fevicon.png" type="image/x-icon">
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/font-awesome.min.css"/>
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .carousel-inner { border-radius: 18px; }
+    .client_container { text-align: center; padding: 20px; }
+    .img-box img { width: 180px; height: 130px; object-fit: cover; border-radius: 12px; margin-bottom: 10px; }
+    .detail-box h5 { color: #16763F; margin-top: 8px; font-weight: bold;}
+    .carousel_btn-box a { font-size: 1.3rem; margin: 0 14px; color: #145e34; }
+    .carousel_btn-box { text-align: center; margin-top: 10px;}
+    .carousel_btn-box a:focus, .carousel_btn-box a:hover { color: #0e683c; }
+    .carousel-control-prev, .carousel-control-next { width: auto; }
+    @media (max-width: 600px) { .img-box img { width: 98px; height: 65px; } }
+  </style>
+</head>
+<body class="sub_page">
+  <!-- Header -->
+  <div class="hero_area">
+    <div class="hero_bg_box">
+      <img src="images/hero-bg.jpg" alt="Fondo cabecera SECLICA">
+    </div>
+    <header class="header_section">
+      <div class="header_top">
+        <div class="container-fluid header_top_container d-flex justify-content-between align-items-center">
+          <div class="contact_nav d-flex gap-4">
+            <a href="#"><i class="fa fa-map-marker"></i><span>Bogotá, Colombia</span></a>
+            <a href="tel:+573507348436"><i class="fa fa-phone"></i><span>+57 3507348436</span></a>
+            <a href="mailto:jhonn1987jerp@gmail.com"><i class="fa fa-envelope"></i><span>jhonn1987jerp@gmail.com</span></a>
+          </div>
+        </div>
+      </div>
+      <div class="header_bottom" style="position:relative;">
+        <div class="container-fluid">
+          <nav class="navbar navbar-expand-lg custom_nav-container">
+            <a class="navbar-brand" href="index.html">SECLICA</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse"
+              data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+              aria-expanded="false" aria-label="Toggle navigation">
+              <span><i class="fa fa-bars" style="font-size:2em;"></i></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+                <li class="nav-item"><a class="nav-link" href="acceso.html">Acceso</a></li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </header>
+  </div>
+
+  <!-- Servicios carousel -->
+  <section class="client_section layout_padding">
+    <div class="container">
+      <div class="heading_container heading_center">
+        <h2>Nuestros servicios</h2>
+        <hr>
+      </div>
+      <div id="carouselServicios" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+
+          <!-- Servicio 1 -->
+          <div class="carousel-item active">
+            <div class="row">
+              <div class="col-lg-7 col-md-9 mx-auto">
+                <div class="client_container">
+                  <div class="img-box">
+                    <img src="images/img.moto-embrague.jpg" alt="Mantenimiento preventivo">
+                  </div>
+                  <div class="detail-box">
+                    <h5>Mantenimiento preventivo</h5>
+                    <p>Verificación de <b>alimentación</b>, <b>encendido</b>, <b>chasis</b>, <b>eléctrico</b> y más.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Servicio 2 -->
+          <div class="carousel-item">
+            <div class="row">
+              <div class="col-lg-7 col-md-9 mx-auto">
+                <div class="client_container">
+                  <div class="img-box">
+                    <img src="images/img.cabeza-fuerza.jpg" alt="Reparación de motor">
+                  </div>
+                  <div class="detail-box">
+                    <h5>Reparación de motores</h5>
+                    <p>Reparación de motores <b>2T y 4T</b> con <b>herramienta especializada</b>.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Servicio 3 -->
+          <div class="carousel-item">
+            <div class="row">
+              <div class="col-lg-7 col-md-9 mx-auto">
+                <div class="client_container">
+                  <div class="img-box">
+                    <img src="images/img.motor.jpg" alt="Mecánica rápida">
+                  </div>
+                  <div class="detail-box">
+                    <h5>Mecánica rápida</h5>
+                    <p>Cambio de <b>pastillas de freno</b>, <b>kit de arrastre</b> y ajustes de <b>transmisión</b>.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Servicio 4 -->
+          <div class="carousel-item">
+            <div class="row">
+              <div class="col-lg-7 col-md-9 mx-auto">
+                <div class="client_container">
+                  <div class="img-box">
+                    <img src="images/img.mecanico-jhonn.jpg" alt="Revisión de suspensión">
+                  </div>
+                  <div class="detail-box">
+                    <h5>Revisión de suspensión</h5>
+                    <p>Ajuste y cambio de <b>amortiguadores</b> y chequeo de <b>sistema de dirección</b>.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Más servicios aquí si lo deseas... -->
+
+        </div>
+        <div class="carousel_btn-box">
+          <a class="carousel-control-prev" href="#carouselServicios" role="button" data-slide="prev">
+            <span><i class="fa fa-arrow-left"></i></span>
+            <span class="sr-only">Anterior</span>
+          </a>
+          <a class="carousel-control-next" href="#carouselServicios" role="button" data-slide="next">
+            <span><i class="fa fa-arrow-right"></i></span>
+            <span class="sr-only">Siguiente</span>
+          </a>
+        </div>
+        <div class="text-center mt-3">
+          <a class="btn btn-primary" href="agendar_citas.html">Agendar una cita</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- info section (solo descripción SECLICA, blanco, footer template original) -->
+<section class="info_section mt-4 mb-5" style="background:#53b597; border-radius:18px 18px 0 0; padding-top:32px; padding-bottom:0;">
+  <div class="container">
+    <div class="info_top">
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <span class="navbar-brand" style="font-size:2.2em; color:#F7B500; font-weight:700; letter-spacing:2px; margin-bottom:8px; display:inline-block;">
+            SECLICA
+          </span>
+          <p class="mt-2" style="font-size:1.13em; color:#fff; margin-bottom:0.6em;">
+            Somos una empresa prestadora de servicios especializados en mecánica 
+            de motocicletas de 2T y 4T en Bogotá.<br>
+            Presentamos a nuestros clientes un portafolio que abarca todo lo relacionado 
+            con los principales sistemas: inyección, lubricación, alimentación, dirección, 
+            frenos, transmisión y refrigeración.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer original del template (con año dinámico) -->
+<footer class="footer_section" style="margin-top:-16px;">
+  <div class="container">
+    <p>
+      &copy; <span id="displayYear"></span> All Rights Reserved By
+      <a href="https://html.design/">Free Html Templates</a>
+    </p>
+  </div>
+</footer>
+
+<!-- Script para año dinámico -->
+<script>
+  document.getElementById('displayYear').textContent = new Date().getFullYear();
+</script>
+
+
+
+  <!-- Scripts -->
+  <script src="js/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+  <script src="js/bootstrap.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+  <script src="js/custom.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const y = document.getElementById('displayYear');
+      if (y) y.textContent = new Date().getFullYear();
+    });
+  </script>
+
+</body>
+</html>

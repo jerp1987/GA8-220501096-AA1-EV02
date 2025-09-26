@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>SECLICA | Acceso Clientes</title>
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <link rel="stylesheet" type="text/css" href="css/responsive.css" />
+  <style>
+    #msg.alert { margin-top:12px; }
+    .hero_area { min-height: 120px; margin-bottom: 30px; }
+  </style>
+</head>
+<body>
+  <!-- MENÚ SUPERIOR FUNCIONAL -->
+  <div class="hero_area">
+    <div class="hero_bg_box">
+      <img src="images/hero-bg.jpg" alt="">
+    </div>
+    <header class="header_section">
+      <div class="header_top">
+        <div class="container-fluid header_top_container">
+          <div class="contact_nav">
+            <a href="#"><i class="fa fa-map-marker"></i><span>Localización</span></a>
+            <a href="#"><i class="fa fa-phone"></i><span>Cel 3507348436</span></a>
+            <a href="#"><i class="fa fa-envelope"></i><span>jhonn1987jerp@gmail.com</span></a>
+          </div>
+          <div class="social_box">
+            <a href="https://www.facebook.com/tucuenta" target="_blank"><i class="fa fa-facebook"></i></a>
+            <a href="https://twitter.com/tucuenta" target="_blank"><i class="fa fa-twitter"></i></a>
+            <a href="https://www.linkedin.com/in/tucuenta" target="_blank"><i class="fa fa-linkedin"></i></a>
+            <a href="https://www.instagram.com/tucuenta" target="_blank"><i class="fa fa-instagram"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="header_bottom">
+        <div class="container-fluid">
+          <nav class="navbar navbar-expand-lg custom_nav-container">
+            <a class="navbar-brand" href="index.html">SECLICA</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon" style="color:white;">&#9776;</span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="index.html">INICIO</a></li>
+                <li class="nav-item"><a class="nav-link" href="citas.html">CITAS</a></li>
+                <li class="nav-item"><a class="nav-link" href="agendar_citas.html">AGENDAR CITA</a></li>
+                <li class="nav-item"><a class="nav-link" href="cancelar_citas.html">CANCELAR CITA</a></li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </header>
+  </div>
+  <!-- FIN MENÚ -->
+
+<!-- FORMULARIO ACCESO CLIENTES --> 
+<section class="contact_section">
+  <div class="container">
+    <div class="col-md-8 mx-auto">
+      <div class="form_container">
+        <div class="heading_container heading_center">
+          <h2>Acceso Clientes</h2>
+          <div class="custom-control custom-switch mt-2">
+            <input type="checkbox" class="custom-control-input" id="switch-login">
+            <label class="custom-control-label" for="switch-login">Ya tengo cuenta</label>
+          </div>
+        </div>
+        <form id="form-cliente" novalidate autocomplete="off">
+          <div id="grupo-registro">
+            <div class="form-row">
+              <div class="form-group col-sm-6">
+                <label for="nombre">Nombres</label>
+                <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombres" />
+              </div>
+              <div class="form-group col-sm-6">
+                <label for="apellido">Apellidos</label>
+                <input type="text" id="apellido" name="apellido" class="form-control" placeholder="Apellidos" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-sm-6">
+                <label for="tipo_documento">Tipo Documento</label>
+                <select id="tipo_documento" name="tipo_documento" class="form-control">
+                  <option value="">Seleccionar</option>
+                  <option value="CC">CC</option>
+                  <option value="CE">CE</option>
+                  <option value="Pasaporte">Pasaporte</option>
+                </select>
+              </div>
+              <div class="form-group col-sm-6">
+                <label for="identificacion">Número de Identificación</label>
+                <input type="text" id="identificacion" name="identificacion" class="form-control" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-sm-6">
+                <label for="telefono">Teléfono</label>
+                <input type="tel" id="telefono" name="telefono" class="form-control" />
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-sm-6">
+              <label for="email">Correo</label>
+              <input type="email" id="email" name="email" class="form-control" required />
+            </div>
+            <div class="form-group col-sm-6">
+              <label for="password">Contraseña</label>
+              <input type="password" id="password" name="password" class="form-control" required />
+            </div>
+          </div>
+          <input type="hidden" name="rol" value="cliente">
+          <div class="btn_box">
+            <button type="submit" class="btn btn-primary" id="btn-submit">Registrarme</button>
+          </div>
+          <div id="msg" class="alert d-none" role="alert"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- info section (solo descripción SECLICA, blanco, footer personalizado) -->
+<section class="info_section mt-4 mb-5" style="background:#53b597; border-radius:18px 18px 0 0; padding-top:32px; padding-bottom:0;">
+  <div class="container">
+    <div class="info_top">
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <span class="navbar-brand" style="font-size:2.2em; color:#F7B500; font-weight:700; letter-spacing:2px; margin-bottom:8px; display:inline-block;">
+            SECLICA
+          </span>
+          <p class="mt-2" style="font-size:1.13em; color:#fff; margin-bottom:0.6em;">
+            Somos una empresa prestadora de servicios especializados en mecánica 
+            de motocicletas de 2T y 4T en Bogotá.<br>
+            Presentamos a nuestros clientes un portafolio que abarca todo lo relacionado 
+            con los principales sistemas: inyección, lubricación, alimentación, dirección, 
+            frenos, transmisión y refrigeración.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Footer legal y template info -->
+  <footer style="background:#14632D; color:#fff; border-radius:0 0 18px 18px; padding:22px 0 10px 0; margin-top:38px;">
+    <div class="container text-center">
+      <p style="margin-bottom:8px; font-size:1.13em; letter-spacing:1px; font-weight:600;">
+        SECLICA
+      </p>
+      <small style="color:#fff; opacity:0.87;">
+        © 2025 SECLICA. Todos los derechos reservados.<br>
+        Desarrollado con <a href="https://getbootstrap.com/" target="_blank" style="color:#F7B500; text-decoration:underline;">Bootstrap</a>
+      </small>
+    </div>
+  </footer>
+</section>
+
+<!-- Footer original del template con año dinámico -->
+<footer class="footer_section">
+  <div class="container">
+    <p>
+      &copy; <span id="displayYear"></span> All Rights Reserved By
+      <a href="https://html.design/">Free Html Templates</a>
+    </p>
+  </div>
+</footer>
+
+<!-- Script para año dinámico -->
+<script>
+  document.getElementById('displayYear').textContent = new Date().getFullYear();
+</script>
+
+
+  <!-- SCRIPTS JS NECESARIOS para que funcione el menú -->
+  <script src="js/jquery-3.4.1.min.js"></script>
+  <script src="js/bootstrap.js"></script>
+  <script>
+
+    // ...tu código JS de validación y submit permanece igual...
+    const BASE = "/SECLICA/public";
+    const switchLogin   = document.querySelector('#switch-login');
+    const grupoRegistro = document.querySelector('#grupo-registro');
+    const form          = document.querySelector('#form-cliente');
+    const btnSubmit     = document.querySelector('#btn-submit');
+    const msg           = document.querySelector('#msg');
+
+    function showMsg(text, type="success"){
+      msg.className = `alert alert-${type}`;
+      msg.textContent = text;
+      msg.classList.remove("d-none");
+      msg.scrollIntoView({behavior:"smooth", block:"center"});
+    }
+
+    function hideMsg(){ msg.classList.add("d-none"); }
+
+    switchLogin.addEventListener('change', () => {
+      const loginMode = switchLogin.checked;
+      grupoRegistro.style.display = loginMode ? 'none' : 'block';
+      btnSubmit.textContent = loginMode ? 'Iniciar Sesión' : 'Registrarme';
+      hideMsg();
+    });
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault(); hideMsg();
+      const fd = new FormData(form);
+      const data = Object.fromEntries(fd.entries());
+      const loginMode = switchLogin.checked;
+      if(!data.email || !data.password){
+        showMsg("Debes ingresar tu correo y contraseña.", "danger");
+        return;
+      }
+      if(!loginMode){
+        if(!data.nombre || !data.apellido || !data.tipo_documento || !data.identificacion){
+          showMsg("Completa todos los campos obligatorios del registro.", "danger");
+          return;
+        }
+      }
+      btnSubmit.disabled = true;
+      btnSubmit.textContent = loginMode ? "Ingresando..." : "Registrando...";
+      try {
+        let res, json;
+        if(loginMode){
+          res = await fetch(`${BASE}/api/login.php`, {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({ email:data.email, password:data.password })
+          });
+        } else {
+          res = await fetch(`${BASE}/api/usuarios.php`, {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify(data)
+          });
+        }
+        json = await res.json();
+        if(!json.success){
+          showMsg(json.error || "Error en el servidor", "danger");
+          return;
+        }
+        sessionStorage.setItem("auth_user", JSON.stringify(json.usuario || json.user));
+        showMsg("✅ Operación exitosa. Redirigiendo...", "success");
+        setTimeout(()=>location.href="agendar_citas.html", 800);
+      } catch(err){
+        showMsg("Error: " + (err.message || "Error desconocido."), "danger");
+      } finally {
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = loginMode ? "Iniciar Sesión" : "Registrarme";
+      }
+    });
+  </script>
+</body>
+</html>

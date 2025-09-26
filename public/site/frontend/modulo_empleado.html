@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo Empleados | SECLICA</title>
+  <link rel="stylesheet" href="css/bootstrap.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+  <style>
+    body {
+      background: #f8f8f8;
+      font-family: 'Poppins', Arial, sans-serif;
+      color: #232323;
+    }
+    .header_section {
+      box-shadow: 0 2px 8px #14632D22;
+    }
+    .header_top_container {
+      background: #14632D;
+      color: #fff;
+      font-size: 16px;
+      padding: 6px 0;
+    }
+    .navbar-brand {
+      color: #fff !important;
+      font-size: 2em;
+      font-weight: 700;
+      letter-spacing: 2px;
+      padding-left: 12px;
+    }
+    .btn-success, .btn-info {
+      background: #16763F !important;
+      border: none;
+      font-weight: 600;
+    }
+    .btn-danger {
+      background: #d63031 !important;
+      border: none;
+      font-weight: 600;
+    }
+    .btn-info {
+      background: #146bb2 !important;
+    }
+    .btn-facturar {
+      background: #F7B500 !important;
+      color: #fff;
+      font-weight: 600;
+      border: none;
+    }
+    .panel {
+      background: #fff;
+      border-radius: 18px;
+      padding: 28px 32px;
+      box-shadow: 0 0 24px #b5bab933;
+      margin-bottom: 30px;
+      border-left: 8px solid #14632D33;
+    }
+    h2, h3 {
+      color: #14632D;
+      font-weight: 700;
+    }
+    .small-muted { font-size:.98em; color:#888; }
+    .table thead th {
+      background: #f5f7fa;
+      font-weight: 700;
+    }
+    .table td, .table th {
+      vertical-align: middle;
+    }
+    .badge-agendada { background: #c9f5c9; color: #097330; }
+    .badge-pendiente { background: #fff1c4; color: #9b6b00; }
+    .badge-completada { background: #c7eaff; color: #146bb2; }
+    .badge-cancelada { background: #ffe2e2; color: #c10000; }
+    .footer_section {
+      background: #14632D;
+      color: #fff;
+      padding: 18px 0 8px 0;
+      border-radius: 0 0 18px 18px;
+      margin-top: 50px;
+    }
+    .modal-custom {
+      display:none; position:fixed; z-index:5000; left:0; top:0; width:100vw; height:100vh;
+      background: rgba(30,30,30,0.14); align-items:center; justify-content:center;
+    }
+    .modal-content-custom {
+      background: #fff; padding: 30px 38px 22px 38px; border-radius: 13px; max-width: 400px;
+      box-shadow: 0 8px 28px #0003;
+      border-top: 6px solid #14632D;
+      margin: 80px auto 0 auto;
+      position: relative;
+      animation: pop .22s;
+    }
+    @keyframes pop {
+      from { transform:scale(.85); opacity:0; }
+      to { transform:scale(1); opacity:1; }
+    }
+    .close-modal-btn {
+      position:absolute; top:12px; right:16px; color:#888; background: none; border:none; font-size:1.3em; cursor:pointer;
+    }
+    .form-label { font-weight: 600;}
+    @media (max-width: 990px) {
+      .panel { padding: 16px 8px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+<header class="header_section">
+  <div class="container-fluid header_top_container">
+    <span style="margin-right:24px;"><i class="fa fa-map-marker"></i></span>
+    <span style="margin-right:24px;"><i class="fa fa-phone"></i> ‪‬</span>
+    <span><i class="fa fa-envelope"></i></span>
+  </div>
+  <div class="container-fluid" style="background:#14632D;">
+    <nav class="navbar custom_nav-container" style="padding: 0;">
+      <a class="navbar-brand" href="index.html">SECLICA</a>
+      <!-- BOTÓN MENSAJES DE CONTACTO -->
+      <a href="bandeja_mensajes.html" class="btn btn-info ms-2" style="color:#fff; font-weight:600;">
+        <i class="fa fa-envelope"></i> Mensajes
+      </a>
+      <button class="btn btn-danger ms-auto" onclick="cerrarSesion()">Cerrar Sesión</button>
+    </nav>
+  </div>
+</header>  
+  <main class="container" style="margin-top:40px;">
+
+    <!-- Asignar Nueva Cita -->
+<section class="panel">
+  <h3 class="mb-1">Agendar Cita</h3>
+  <form id="formAsignar" ... >
+    <div class="table-responsive"></div>
+    <!-- ...  formulario citas empleado campos ... -->
+  </form>
+</section>
+<form id="formAsignar" class="row g-3" autocomplete="off">
+  <div class="col-md-3">
+    <label class="form-label">Nombre</label>
+    <input id="a_nombre" type="text" class="form-control" required>
+  </div>
+  <div class="col-md-3">
+    <label class="form-label">Apellido</label>
+    <input id="a_apellido" type="text" class="form-control" required>
+  </div>
+  <div class="col-md-2">
+    <label class="form-label">Tipo Doc.</label>
+    <select id="a_tipo_documento" class="form-control" required>
+      <option value="">Seleccione</option>
+      <option>CC</option><option>TI</option><option>CE</option><option>NIT</option>
+    </select>
+  </div>
+  <div class="col-md-4">
+    <label class="form-label">Número Documento</label>
+    <input id="a_numero_documento" type="text" class="form-control" required>
+  </div>
+  <div class="col-md-4">
+    <label class="form-label">Correo</label>
+    <input id="a_correo" type="email" class="form-control" required>
+  </div>
+  <div class="col-md-3">
+    <label class="form-label">Teléfono</label>
+    <input id="a_telefono" type="text" class="form-control" required>
+  </div>
+  <div class="col-md-2">
+    <label class="form-label">Placa</label>
+    <input id="a_placa" type="text" class="form-control" required>
+  </div>
+  <div class="col-md-3">
+    <label class="form-label">Servicio</label>
+    <select id="a_servicio" class="form-control" required>
+      <option value="">Seleccione</option>
+      <option>Mantenimiento Preventivo</option>
+      <option>Sincronización</option>
+      <option>Reparación Motor</option>
+      <option>Sistema Eléctrico</option>
+      <option>Sistema Alimentación</option>
+      <option>Sistemas Frenos</option>
+      <option>Sistema Lubricación</option>
+      <option>Sistema Dirección</option>
+      <option>Sistema Alimentación Combustible</option>
+      <option>Sistema Suspensión</option>
+      <option>Sistema Electrónico y eléctrico</option>
+      <option>Scanner OBD1/OBD2</option>
+      <option>Análisis Gases</option>
+      <option>Mecánica Rápida</option>
+      <option>Otros</option>
+    </select>
+  </div>
+  <div class="col-md-2">
+    <label class="form-label">Fecha</label>
+    <input id="a_fecha" type="date" class="form-control" required>
+  </div>
+  <div class="col-md-10">
+    <label class="form-label">Descripción adicional (opcional)</label>
+    <input id="a_descripcion" type="text" class="form-control" placeholder="Observaciones del cliente / del vehículo">
+  </div>
+  <div class="col-md-2 d-flex align-items-end">
+    <button type="submit" class="btn btn-success w-100">Asignar</button>
+  </div>
+</form>
+<div id="msg-asignar" class="alert d-none mt-3" role="alert"></div>
+
+        <!-- Todos los campos igual -->
+        
+      </form>
+      <div id="msg-asignar" class="alert d-none mt-3" role="alert"></div>
+    </section>  
+
+<!--// ====== CANCELAR CITA ====== -->
+
+<section class="panel">
+  <h3 class="mb-1">Cancelar Cita</h3>
+  <p class="small-muted mb-3">
+    Registra el motivo; se guarda en la tabla <b>cancelaciones</b> y se cambia el estado en <b>citas</b>.
+  </p>
+  <form id="formCancelar" class="row g-2">
+    <div class="col-md-3">
+      <input id="c_cita_id" type="number" class="form-control" placeholder="ID de Cita" required>
+    </div>
+    <div class="col-md-7">
+      <input id="c_motivo" type="text" class="form-control" placeholder="Motivo de cancelación" required>
+    </div>
+    <div class="col-md-2">
+      <button type="submit" class="btn btn-danger w-100">Cancelar</button>
+    </div>
+  </form>
+  <div id="msg-cancelar" class="alert d-none mt-3" role="alert"></div>
+</section>
+
+
+    <!-- Listado de Citas -->
+    <section class="panel">
+      <h2 class="mb-3">Citas</h2>
+      <div class="table-responsive">
+        <table class="table mb-0 align-middle">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Cliente</th>
+              <th>Placa</th>
+              <th>Servicio</th>
+              <th>Fecha</th>
+              <th>Estado</th>
+              <th>Facturar</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-citas">
+            <tr><td colspan="7">Cargando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Facturas de Servicios -->
+    <section class="panel">
+      <h2 class="mb-3">Facturas de Servicios</h2>
+      <div class="table-responsive">
+        <table class="table mb-0 align-middle">
+          <thead>
+            <tr>
+              <th>ID Factura</th>
+              <th>ID Cliente</th>
+              <th>Descripción</th>
+              <th>Subtotal</th>
+              <th>IVA</th>
+              <th>Total</th>
+              <th>Estado</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tbody-facturas">
+            <tr><td colspan="8">Cargando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- MODAL FACTURAR -->
+  <div id="modalFacturar" class="modal-custom">
+    <div class="modal-content-custom">
+      <button class="close-modal-btn" onclick="cerrarModalFacturar()">&times;</button>
+      <h4 style="color:#14632D; font-weight:700; margin-bottom:14px;">Generar Factura</h4>
+      <form id="formFacturar">
+        <input type="hidden" id="modal_cita_id">
+        <div class="mb-2">
+          <label class="form-label">Cliente</label>
+          <input id="modal_cliente" class="form-control" type="text" readonly>
+        </div>
+        <div class="mb-2">
+          <label class="form-label">Servicio</label>
+          <input id="modal_servicio" class="form-control" type="text" readonly>
+        </div>
+        <div class="mb-2">
+          <label class="form-label">Descripción</label>
+          <input id="modal_descripcion" class="form-control" type="text" required>
+        </div>
+        <div class="mb-2">
+          <label class="form-label">Subtotal ($)</label>
+          <input id="modal_subtotal" class="form-control" type="number" min="0" required>
+        </div>
+        <div class="mb-2">
+          <label class="form-label">IVA ($)</label>
+          <input id="modal_iva" class="form-control" type="number" min="0" required>
+        </div>
+        <div class="mb-2">
+          <label class="form-label">Total ($)</label>
+          <input id="modal_total" class="form-control" type="number" min="0" required>
+        </div>
+        <div class="mb-2">
+          <label class="form-label">Estado</label>
+          <select id="modal_estado" class="form-control" required>
+            <option value="">Seleccione</option>
+            <option value="pagada">Pagada</option>
+            <option value="pendiente">Pendiente</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-success w-100">Guardar Factura</button>
+        <div id="msg-facturar" class="alert d-none mt-2" role="alert"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer_section">
+    <div class="container text-center">
+      <p>&copy; <span id="year"></span> SECLICA. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+<script>
+const BASE = "/SECLICA/public";
+const $  = (s) => document.querySelector(s);
+
+// FUNCIONES DE ALERTAS (deben ir arriba para usarse en todo el código)
+const alertOk = (el, txt) => { el.className = "alert alert-success"; el.textContent = txt; el.classList.remove("d-none"); }
+const alertErr= (el, txt) => { el.className = "alert alert-danger";  el.textContent = txt; el.classList.remove("d-none"); }
+const alertHide= (el) => el.classList.add("d-none");
+
+document.getElementById('year').textContent = new Date().getFullYear();
+
+// ========== AJUSTE CERRAR SESIÓN EMPLEADO ==========
+function cerrarSesion() {
+  sessionStorage.clear();
+  localStorage.clear();
+  fetch('/SECLICA/public/api/logout.php', { method: 'POST' })
+    .finally(() => {
+      window.location.href = "index.html";
+    });
+}
+
+// ===================================================
+
+// ========== LISTAR CITAS ==========
+async function cargarCitas() {
+  const tb = $('#tbody-citas');
+  tb.innerHTML = `<tr><td colspan="7">Cargando...</td></tr>`;
+  try {
+    const res = await fetch(`${BASE}/api/citas.php`);
+    const json = await res.json().catch(()=>null);
+    const rows = (json && (json.data || json.rows || json)) || [];
+    if (!Array.isArray(rows) || rows.length === 0) {
+      tb.innerHTML = `<tr><td colspan="7">Sin citas.</td></tr>`;
+      return;
+    }
+    tb.innerHTML = rows.map(c => {
+      const estado = (c.estado || '').toLowerCase();
+      const badgeClass = estado === 'cancelada' ? 'badge-cancelada'
+                        : estado === 'completada' ? 'badge-completada'
+                        : estado === 'pendiente' ? 'badge-pendiente'
+                        : 'badge-agendada';
+      // Solo permitir facturar si está pendiente o completada y aún no tiene factura
+      const facturarBtn = (estado === 'pendiente' || estado === 'completada')
+        ? `<button class="btn btn-facturar btn-sm" onclick="abrirModalFacturar(${c.id}, '${(c.servicio||'').replace(/'/g,'')}', '${(c.nombre||'') + ' ' + (c.apellido||'')}')">Facturar</button>`
+        : '';
+      return `
+        <tr>
+          <td>${c.id ?? ''}</td>
+          <td>${(c.nombre||'') + ' ' + (c.apellido||'')}</td>
+          <td>${c.placa_vehiculo ?? ''}</td>
+          <td>${c.servicio ?? ''}</td>
+          <td>${c.fecha ?? ''}</td>
+          <td><span class="badge ${badgeClass}">${c.estado ?? ''}</span></td>
+          <td>${facturarBtn}</td>
+        </tr>
+      `;
+    }).join('');
+  } catch {
+    tb.innerHTML = `<tr><td colspan="7">Error cargando citas.</td></tr>`;
+  }
+}
+
+// ====== CANCELAR CITA ======
+$('#formCancelar').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const box = $('#msg-cancelar'); alertHide(box);
+
+  const payload = {
+    cita_id: Number($('#c_cita_id').value),
+    motivo: $('#c_motivo').value.trim()
+  };
+  if (!payload.cita_id || !payload.motivo) {
+    alertErr(box, 'Debes indicar el ID de la cita y el motivo.');
+    return;
+  }
+
+  try {
+    const res = await fetch(`${BASE}/api/cancelar_cita.php`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const json = await res.json().catch(()=>({success:false,error:'Respuesta no válida'}));
+    if (!res.ok || json.success === false) {
+      throw new Error(json.error || 'No se pudo cancelar la cita');
+    }
+    alertOk(box, '✅ Cita cancelada correctamente');
+    e.target.reset();
+    cargarCitas();
+  } catch (err) {
+    alertErr(box, err.message);
+  }
+});
+
+// ========== LISTAR FACTURAS ==========
+async function cargarFacturas() {
+  const tb = $('#tbody-facturas');
+  tb.innerHTML = `<tr><td colspan="8">Cargando...</td></tr>`;
+  try {
+    const res = await fetch(`${BASE}/api/facturas.php`);
+    const json = await res.json().catch(()=>null);
+    const rows = (json && (json.data || json.rows || json)) || [];
+    if (!Array.isArray(rows) || rows.length === 0) {
+      tb.innerHTML = `<tr><td colspan="8">Sin facturas.</td></tr>`;
+      return;
+    }
+    tb.innerHTML = rows.map(f => `
+      <tr>
+        <td>${f.id ?? ''}</td>
+        <td>${f.cliente_id ?? ''}</td>
+        <td>${f.descripcion ?? ''}</td>
+        <td>${Number(f.subtotal ?? 0).toLocaleString()}</td>
+        <td>${Number(f.iva ?? 0).toLocaleString()}</td>
+        <td>${Number(f.total ?? 0).toLocaleString()}</td>
+        <td>${f.estado ?? ''}</td>
+        <td>
+          <button class="btn btn-sm btn-info" onclick="imprimirFactura(${f.id})">
+            🖨️ Imprimir
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  } catch {
+    tb.innerHTML = `<tr><td colspan="8">Error cargando facturas.</td></tr>`;
+  }
+}
+
+// ========== FACTURAR ==========
+function abrirModalFacturar(citaId, servicio, cliente) {
+  $('#modal_cita_id').value = citaId;
+  $('#modal_cliente').value = cliente;
+  $('#modal_servicio').value = servicio;
+  $('#modal_descripcion').value = '';
+  $('#modal_subtotal').value = '';
+  $('#modal_iva').value = '';
+  $('#modal_total').value = '';
+  $('#modal_estado').value = '';
+  $('#msg-facturar').classList.add('d-none');
+  $('#modalFacturar').style.display = 'flex';
+}
+function cerrarModalFacturar() {
+  $('#modalFacturar').style.display = 'none';
+}
+
+$('#formFacturar').onsubmit = async function(e) {
+  e.preventDefault();
+  const box = $('#msg-facturar');
+  alertHide(box);
+  const payload = {
+    cita_id: $('#modal_cita_id').value,
+    descripcion: $('#modal_descripcion').value.trim(),
+    subtotal: $('#modal_subtotal').value,
+    iva: $('#modal_iva').value,
+    total: $('#modal_total').value,
+    estado: $('#modal_estado').value
+  };
+  if (!payload.descripcion || !payload.subtotal || !payload.iva || !payload.total || !payload.estado) {
+    alertErr(box, "Todos los campos son obligatorios.");
+    return;
+  }
+  try {
+    const res = await fetch(`${BASE}/api/generar_factura.php`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const json = await res.json().catch(()=>({success:false,error:'Respuesta no válida'}));
+    if (!res.ok || json.success === false) {
+      throw new Error(json.error || 'No se pudo crear la factura');
+    }
+    alertOk(box, "✅ Factura generada correctamente");
+    setTimeout(() => { cerrarModalFacturar(); cargarFacturas(); }, 1200);
+  } catch (err) {
+    alertErr(box, err.message);
+  }
+};
+
+function imprimirFactura(id) {
+  window.open(`${BASE}/api/factura.php?id=${id}`, '_blank');
+}
+
+// ========== Cargar datos iniciales ==========
+cargarCitas();
+cargarFacturas();
+
+// ====== ASIGNAR CITA ======
+$('#formAsignar').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const box = $('#msg-asignar'); alertHide(box);
+
+  const payload = {
+    nombre:              $('#a_nombre').value.trim(),
+    apellido:            $('#a_apellido').value.trim(),
+    tipo_documento:      $('#a_tipo_documento').value,
+    numero_documento:    $('#a_numero_documento').value.trim(),
+    correo:              $('#a_correo').value.trim(),
+    telefono:            $('#a_telefono').value.trim(),
+    fecha:               $('#a_fecha').value,
+    placa_vehiculo:      $('#a_placa').value.trim(),
+    servicio:            $('#a_servicio').value,
+    descripcion_adicional: $('#a_descripcion').value.trim()
+  };
+
+  // Validación mínima
+  for (const [k,v] of Object.entries(payload)) {
+    if (!v && k !== 'descripcion_adicional') {
+      alertErr(box, `Falta el campo: ${k.replace('_',' ')}`);
+      return;
+    }
+  }
+
+  try {
+    const res = await fetch(`${BASE}/api/agendar_cita.php`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error("Error al conectar con el servidor");
+    const json = await res.json().catch(()=>({success:false,error:'Respuesta no válida'}));
+    if (!json.success) throw new Error(json.error || "No se pudo agendar la cita");
+    alertOk(box, '✅ Cita creada correctamente');
+    e.target.reset();
+    cargarCitas();
+  } catch (err) {
+    alertErr(box, "ERROR: " + err.message);
+  }
+});
+</script>
+</body>
+</html>

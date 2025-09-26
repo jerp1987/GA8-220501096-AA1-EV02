@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Bandeja de Mensajes | SECLICA</title>
+  <link rel="stylesheet" href="css/bootstrap.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .table thead th { background: #168940; color: #fff; }
+    .table td, .table th { vertical-align: middle !important; }
+    .badge-resp { font-size: 0.85em; }
+    .respuesta { background: #f5fff7; border-left: 4px solid #168940; margin: 0.5rem 0 1rem 1rem; padding: 0.6rem 1rem; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <div class="container my-5">
+    <h2 class="mb-4 text-center">Bandeja de Mensajes de Contacto</h2>
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover" id="tabla-mensajes">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Teléfono</th>
+            <th>Mensaje</th>
+            <th>Fecha</th>
+            <th>Respuesta</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Se llena por JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Modal para responder -->
+  <div class="modal fade" id="modalResponder" tabindex="-1" aria-labelledby="modalResponderLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="formResponder">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalResponderLabel">Responder mensaje</h5>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="mensaje_id" name="mensaje_id">
+            <div class="form-group">
+              <label for="respuesta">Respuesta</label>
+              <textarea class="form-control" id="respuesta" name="respuesta" required></textarea>
+            </div>
+            <div id="respMsg" class="alert d-none"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Enviar</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/jquery-3.4.1.min.js"></script>
+  <script src="js/bootstrap.js"></script>
+  <script>
+    const BASE = "/SECLICA/public";
+    const rol = sessionStorage.getItem('rol') || 'empleado'; // admin o empleado
+    const nombre_sesion = sessionStorage.getItem('user_name') || 'Empleado';
+
+    // Cargar mensajes y respuestas
+    async function loadMensajes() {
+      const tbody = document.querySelector("#tabla-mensajes tbody");
+      tbody.innerHTML = "<tr><td colspan='8' class='text-center'>Cargando...</td></tr>";
+      const res = await fetch(`${BASE}/api/mensajes_contacto.php`);
+      const json = await res.json();
+
+      tbody.innerHTML = json.data.map(m => `
+        <tr>
+          <td>${m.id}</td>
+          <td>${m.nombre}</td>
+          <td>${m.correo}</td>
+          <td>${m.telefono}</td>
+          <td>${m.mensaje}</td>
+          <td>${m.fecha_envio}</td>
+          <td>
+            ${m.respuesta ? `
+              <div class="respuesta">
+                <b>${m.respondido_por}:</b> ${m.respuesta}
+                <div class="badge badge-info badge-resp">${m.fecha_respuesta}</div>
+              </div>
+            ` : '<span class="badge badge-warning">Sin responder</span>'}
+          </td>
+          <td>
+            ${!m.respuesta ? `<button class="btn btn-sm btn-success" onclick="abrirModal(${m.id})">Responder</button>` : ""}
+            ${rol === 'admin' ? `<button class="btn btn-sm btn-danger" onclick="eliminarMensaje(${m.id})">Eliminar</button>` : ""}
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Modal de respuesta
+    window.abrirModal = function(id){
+      $("#mensaje_id").val(id);
+      $("#respuesta").val('');
+      $("#respMsg").addClass("d-none");
+      $("#modalResponder").modal('show');
+    }
+
+    // Enviar respuesta
+    document.getElementById("formResponder").onsubmit = async function(e){
+      e.preventDefault();
+      const data = {
+        mensaje_id: $("#mensaje_id").val(),
+        respuesta: $("#respuesta").val(),
+        respondido_por: nombre_sesion
+      };
+      const res = await fetch(`${BASE}/api/responder_contacto.php`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+      const json = await res.json();
+      const msgDiv = $("#respMsg");
+      if(json.success){
+        msgDiv.removeClass("d-none").addClass("alert alert-success").text("Respuesta enviada.");
+        setTimeout(() => { $("#modalResponder").modal('hide'); loadMensajes(); }, 1000);
+      } else {
+        msgDiv.removeClass("d-none").addClass("alert alert-danger").text(json.error || "Error enviando respuesta.");
+      }
+    }
+
+    // Eliminar mensaje (solo admin)
+    window.eliminarMensaje = async function(id){
+      if(!confirm("¿Seguro que deseas eliminar este mensaje?")) return;
+      const res = await fetch(`${BASE}/api/eliminar_mensajes_contacto.php`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id })
+      });
+      const json = await res.json();
+      if(json.success) loadMensajes();
+      else alert(json.error || "Error eliminando mensaje.");
+    }
+
+    loadMensajes();
+  </script>
+</body>
+</html>

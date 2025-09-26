@@ -1,0 +1,4 @@
+<?php
+echo "FACTURAS OK";
+?>
+

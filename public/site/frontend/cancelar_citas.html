@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="shortcut icon" href="images/fevicon.png" type="image/x-icon">
+  <title>Cancelar Citas</title>
+
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <link rel="stylesheet" type="text/css" href="css/responsive.css" />
+  <style>
+    .form_container { background: #fff; border-radius: 12px; box-shadow: 0 0 20px #0002; padding: 36px 30px 24px 30px; margin-top: 40px; }
+    .hero_area { min-height: 120px; margin-bottom: 30px; }
+    #mensaje.alert { margin-top: 12px; }
+  </style>
+</head>
+<body>
+  <!-- MENÚ SUPERIOR FUNCIONAL -->
+  <div class="hero_area">
+    <div class="hero_bg_box">
+      <img src="images/hero-bg.jpg" alt="">
+    </div>
+    <header class="header_section">
+      <div class="header_top">
+        <div class="container-fluid header_top_container">
+          <div class="contact_nav">
+            <a href="#"><i class="fa fa-map-marker"></i><span>Localización</span></a>
+            <a href="#"><i class="fa fa-phone"></i><span>Cel 3507348436</span></a>
+            <a href="#"><i class="fa fa-envelope"></i><span>jhonn1987jerp@gmail.com</span></a>
+          </div>
+          <div class="social_box">
+            <a href="https://www.facebook.com/tucuenta" target="_blank"><i class="fa fa-facebook"></i></a>
+            <a href="https://twitter.com/tucuenta" target="_blank"><i class="fa fa-twitter"></i></a>
+            <a href="https://www.linkedin.com/in/tucuenta" target="_blank"><i class="fa fa-linkedin"></i></a>
+            <a href="https://www.instagram.com/tucuenta" target="_blank"><i class="fa fa-instagram"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="header_bottom">
+        <div class="container-fluid">
+          <nav class="navbar navbar-expand-lg custom_nav-container">
+            <a class="navbar-brand" href="index.html">SECLICA</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon" style="color:white;">&#9776;</span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="index.html">INICIO</a></li>
+                <li class="nav-item"><a class="nav-link" href="citas.html">CITAS</a></li>
+                <li class="nav-item"><a class="nav-link" href="agendar_citas.html">AGENDAR CITA</a></li>
+                <li class="nav-item"><a class="nav-link" href="cancelar_citas.html">CANCELAR CITA</a></li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </header>
+  </div>
+  <!-- FIN MENÚ -->
+
+  <!-- FORMULARIO CANCELAR CITA -->
+  <section class="contact_section">
+    <div class="container">
+      <div class="col-md-6 col-lg-5 mx-auto">
+        <div class="form_container">
+          <div class="heading_container heading_center">
+            <h2>Cancelar Cita</h2>
+          </div>
+          <form id="formCancelar" autocomplete="off">
+            <div class="form-row">
+              <div class="form-group col">
+                <label for="cita_id">ID de la cita</label>
+                <input type="number" min="1" class="form-control" id="cita_id" name="cita_id" placeholder="ID de la cita" required />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col">
+                <label for="motivo">Motivo de cancelación</label>
+                <textarea class="form-control" id="motivo" name="motivo" placeholder="Motivo de la cancelación" required></textarea>
+              </div>
+            </div>
+            <div class="btn_box">
+              <button type="submit" class="btn btn-danger w-100">Cancelar cita</button>
+            </div>
+            <div id="mensaje" class="alert d-none" role="alert"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- footer section igual -->
+<!-- info section (solo descripción SECLICA, blanco, footer personalizado) -->
+<section class="info_section mt-4 mb-5" style="background:#53b597; border-radius:18px 18px 0 0; padding-top:32px; padding-bottom:0;">
+  <div class="container">
+    <div class="info_top">
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <span class="navbar-brand" style="font-size:2.2em; color:#F7B500; font-weight:700; letter-spacing:2px; margin-bottom:8px; display:inline-block;">
+            SECLICA
+          </span>
+          <p class="mt-2" style="font-size:1.13em; color:#fff; margin-bottom:0.6em;">
+            Somos una empresa prestadora de servicios especializados en mecánica 
+            de motocicletas de 2T y 4T en Bogotá.<br>
+            Presentamos a nuestros clientes un portafolio que abarca todo lo relacionado 
+            con los principales sistemas: inyección, lubricación, alimentación, dirección, 
+            frenos, transmisión y refrigeración.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Footer legal y template info -->
+  <footer style="background:#14632D; color:#fff; border-radius:0 0 18px 18px; padding:22px 0 10px 0; margin-top:38px;">
+    <div class="container text-center">
+      <p style="margin-bottom:8px; font-size:1.13em; letter-spacing:1px; font-weight:600;">
+        SECLICA
+      </p>
+      <small style="color:#fff; opacity:0.87;">
+        © 2025 SECLICA. Todos los derechos reservados.<br>
+        Desarrollado con <a href="https://getbootstrap.com/" target="_blank" style="color:#F7B500; text-decoration:underline;">Bootstrap</a>
+      </small>
+    </div>
+  </footer>
+</section>
+
+<!-- Footer original del template con año dinámico -->
+<footer class="footer_section">
+  <div class="container">
+    <p>
+      &copy; <span id="displayYear"></span> All Rights Reserved By
+      <a href="https://html.design/">Free Html Templates</a>
+    </p>
+  </div>
+</footer>
+
+<!-- Script para año dinámico -->
+<script>
+  document.getElementById('displayYear').textContent = new Date().getFullYear();
+</script>
+
+
+  <!-- Scripts iguales -->
+  <script src="js/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+  <script src="js/bootstrap.js"></script>
+  <script src="js/custom.js"></script>
+  <!-- Menú hamburguesa Bootstrap 100% funcional -->
+
+  <script>
+  const BASE = "/SECLICA/public";
+  document.getElementById("formCancelar").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    const cita_id = document.getElementById("cita_id").value;
+    const motivo = document.getElementById("motivo").value.trim();
+    const mensaje = document.getElementById("mensaje");
+    mensaje.textContent = "";
+    mensaje.className = "alert d-none mt-3";
+    if (!cita_id || !motivo) {
+      mensaje.textContent = "⚠️ Debes ingresar el ID de la cita y el motivo.";
+      mensaje.className = "alert alert-warning mt-3";
+      mensaje.classList.remove("d-none");
+      return;
+    }
+    try {
+      const res = await fetch(`${BASE}/api/cancelar_cita.php`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ cita_id, motivo })
+      });
+      const out = await res.json();
+      if (out.success) {
+        mensaje.textContent = "✅ Cita cancelada correctamente.";
+        mensaje.className = "alert alert-success mt-3";
+        mensaje.classList.remove("d-none");
+        document.getElementById("formCancelar").reset();
+      } else {
+        mensaje.textContent = "❌ " + (out.error || "No se pudo cancelar la cita.");
+        mensaje.className = "alert alert-danger mt-3";
+        mensaje.classList.remove("d-none");
+      }
+    } catch(err) {
+      mensaje.textContent = "❌ Error de conexión o del servidor.";
+      mensaje.className = "alert alert-danger mt-3";
+      mensaje.classList.remove("d-none");
+    }
+  });
+  </script>
+</body>
+</html>

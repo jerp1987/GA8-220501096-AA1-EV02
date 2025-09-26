@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panel de Administración | SECLICA</title>
+  <link rel="stylesheet" href="css/bootstrap.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/font-awesome.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { background: #f5f7fa; }
+    .admin-header { background: hsl(110, 82%, 38%); color: #fff; padding: 18px 0 9px 0; }
+    .admin-header .navbar-brand { color: #fff; font-weight: bold; letter-spacing: 1px; }
+    .logout-btn { background: #ba181b; color: #fff; border: none; border-radius: 7px; padding: 7px 20px; }
+    .admin-tabs { margin: 30px 0 20px 0; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+    .admin-tab { background: #fff; color: #16763F; border: none; padding: 12px 25px; border-radius: 12px 12px 0 0; font-weight: 600; font-size: 1.06em; transition: .2s; cursor: pointer; border-bottom: 2px solid #16763F11;}
+    .admin-tab.active, .admin-tab:focus { background: hsl(110, 82%, 38%); color: #fff; border-bottom: 3px solid #145e34; }
+    .admin-content { background: #fff; border-radius: 0 0 16px 16px; box-shadow: 0 4px 18px #b5bab944; padding: 25px 10px 30px 10px; max-width: 1350px; margin: auto; min-width: 320px; width: 98vw;}
+    .btn-sm { font-size: .98em; padding: 3px 9px; border-radius: 7px; }
+    .btn-edit { background: #16763F; color: #fff; border: none;}
+    .btn-del { background: #ba181b; color: #fff; border: none;}
+    .btn-edit:hover, .btn-del:hover { opacity: .85; }
+    .badge { border-radius: 7px; padding: 2px 11px; font-size: .97em; font-weight: 600; }
+    .badge.admin { background: #54d395; color: #02613a; }
+    .badge.empleado { background: #bee1fa; color: #055d87; }
+    .badge.cliente { background: #ffe8b7; color: #9e7200; }
+    .reporte-card { max-width: 100%; box-shadow: 0 4px 16px #ccc6; border-radius: 12px; }
+    .reporte-table-scroll { width: 100%; overflow-x: auto; padding: 0;}
+    #tabla-reporte { min-width: 860px; width: 100%; font-size: 1em;}
+    .admin-table { width: 100%; border-collapse: collapse; margin-top: 12px; min-width: 1000px;}
+    .admin-table th, .admin-table td { padding: 10px 7px; text-align: center; border-bottom: 1px solid #e2e2e2; }
+    .admin-table thead { background: #f2f2f2; }
+    @media (max-width: 1100px) {
+      #tabla-reporte, .admin-table { min-width: 680px; font-size: .93em;}
+      .admin-content { max-width: 99vw;}
+    }
+    @media (max-width: 700px) {
+      .admin-content { padding: 2vw; }
+      #tabla-reporte, .admin-table { min-width: 440px; font-size: .88em;}
+      .btn_box { flex-direction: column !important; gap: 5px; }
+      #btn-ver, #btn-excel { width: 100% !important; margin-bottom: 7px; }
+    }
+    @media (max-width: 520px) {
+      .admin-content { padding: 1vw; }
+      .admin-header { font-size: .95em;}
+      .admin-table th, .admin-table td { padding: 7px 4px;}
+    }
+  </style>
+</head>
+<body>
+  
+<!-- Header superior -->
+<div class="admin-header">
+  <div class="container d-flex justify-content-between align-items-center">
+    <a class="navbar-brand" href="index.html">SECLICA <small>Admin</small></a>
+    <!-- BOTÓN MENSAJES DE CONTACTO -->
+    <a href="bandeja_mensajes.html" class="btn btn-info mr-3" style="color:#fff; font-weight:600;">
+      <i class="fa fa-envelope"></i> Mensajes
+    </a>
+    <button class="logout-btn" id="logoutBtn"><i class="fa fa-sign-out"></i> Cerrar sesión</button>
+  </div>
+</div>
+
+  <!-- Menú tabs -->
+  <div class="admin-tabs">
+    <button class="admin-tab active" id="tabUsuarios" onclick="showTab('usuarios')"><i class="fa fa-users"></i> Usuarios</button>
+    <button class="admin-tab" id="tabCitas" onclick="showTab('citas')"><i class="fa fa-calendar"></i> Citas</button>
+    <button class="admin-tab" id="tabReportes" onclick="showTab('reportes')"><i class="fa fa-bar-chart"></i> Reportes</button>
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="admin-content">
+    <!-- USUARIOS -->
+    <div id="panelUsuarios">
+      <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+        <h3 class="mb-0">Gestión de Usuarios</h3>
+        <button class="btn btn-success" onclick="openModalUsuario()">+ Agregar Usuario</button>
+      </div>
+      <div class="mb-2">
+        <label for="filtroRol" class="mr-2">Filtrar por rol:</label>
+        <select id="filtroRol" class="form-control d-inline" style="width:auto;display:inline-block;" onchange="cargarUsuarios()">
+          <option value="">Todos</option>
+          <option value="admin">Administrador</option>
+          <option value="empleado">Empleado</option>
+          <option value="cliente">Cliente</option>
+        </select>
+      </div>
+      <div class="table-responsive reporte-table-scroll">
+      <table class="admin-table" id="tablaUsuarios">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Tipo Doc.</th>
+            <th>Identificación</th>
+            <th>Email</th>
+            <th>Teléfono</th>
+            <th>Rol</th>
+            <th>Estado</th>
+            <th>F. Registro</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="11">Cargando usuarios...</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <!-- CITAS -->
+    <div id="panelCitas" style="display:none;">
+      <h3 class="mb-3">Citas Recientes</h3>
+      <div class="table-responsive reporte-table-scroll">
+      <table class="admin-table" id="tablaCitas">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Tipo Doc.</th>
+            <th>N° Documento</th>
+            <th>Correo</th>
+            <th>Teléfono</th>
+            <th>Fecha</th>
+            <th>Placa Vehículo</th>
+            <th>Servicio</th>
+            <th>Descripción</th>
+            <th>Estado</th>
+            <th>F. Registro</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="13">Cargando citas...</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <!-- REPORTES -->
+    <div id="panelReportes" style="display:none;">
+      <div class="heading_container heading_center mb-4">
+        <h3>Reportes del Sistema</h3>
+        <p>Consulta y descarga reportes de usuarios, citas y facturación del taller.</p>
+        <div id="flash" class="small text-info"></div>
+      </div>
+      <div class="row mb-4">
+        <div class="col-lg-8 col-12 mb-2">
+          <label for="tipo_reporte"><b>Tipo de reporte:</b></label>
+          <select id="tipo_reporte" class="form-control mb-2">
+            <option value="citas">Citas agendadas</option>
+            <option value="usuarios">Usuarios registrados</option>
+            <option value="facturas">Facturación</option>
+          </select>
+        </div>
+        <div class="col-lg-4 col-12 btn_box d-flex align-items-end">
+          <button id="btn-ver" class="btn btn-primary w-100 mr-2">Ver reporte</button>
+          <button id="btn-excel" class="btn btn-success w-100">Descargar Excel</button>
+        </div>
+      </div>
+      <div id="preview-box" class="card mt-3 reporte-card" style="display:none;">
+        <div class="card-body" style="padding:8px;">
+          <div id="reporte-titulo" class="h5 mb-2"></div>
+          <div class="table-responsive reporte-table-scroll">
+            <table class="table table-striped table-bordered" id="tabla-reporte">
+              <thead></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL Usuario -->
+  <div class="modal fade" id="modalUsuario" tabindex="-1" role="dialog" aria-labelledby="modalUsuarioLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <form id="formUsuario" autocomplete="off">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalUsuarioLabel">Agregar/Editar Usuario</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="usuarioId" name="usuarioId">
+            <div class="form-group">
+              <label for="nombre">Nombre</label>
+              <input type="text" class="form-control" id="nombre" name="nombre" required>
+            </div>
+            <div class="form-group">
+              <label for="apellido">Apellido</label>
+              <input type="text" class="form-control" id="apellido" name="apellido" required>
+            </div>
+            <div class="form-group">
+              <label for="tipo_documento">Tipo de Documento</label>
+              <input type="text" class="form-control" id="tipo_documento" name="tipo_documento" required>
+            </div>
+            <div class="form-group">
+              <label for="identificacion">Identificación</label>
+              <input type="text" class="form-control" id="identificacion" name="identificacion" required>
+            </div>
+            <div class="form-group">
+              <label for="correo">Correo electrónico</label>
+              <input type="email" class="form-control" id="correo" name="correo" required>
+            </div>
+            <div class="form-group">
+              <label for="telefono">Teléfono</label>
+              <input type="text" class="form-control" id="telefono" name="telefono" required>
+            </div>
+            <div class="form-group">
+              <label for="rol">Rol</label>
+              <select class="form-control" id="rol" name="rol" required>
+                <option value="">Seleccione</option>
+                <option value="admin">Administrador</option>
+                <option value="empleado">Empleado</option>
+                <option value="cliente">Cliente</option>
+              </select>
+            </div>
+            <div class="form-group" id="passwordGroup">
+              <label for="password">Contraseña</label>
+              <input type="password" class="form-control" id="password" name="password" autocomplete="new-password">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Guardar</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer_section" style="margin-top:45px;">
+    <div class="container text-center">
+      <p>&copy; <span id="displayYear"></span> SECLICA. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script src="js/jquery-3.4.1.min.js"></script>
+  <script src="js/bootstrap.js"></script>
+  <script>
+    // Tabs
+    function showTab(tab) {
+      document.getElementById("tabUsuarios").classList.toggle("active", tab === 'usuarios');
+      document.getElementById("tabCitas").classList.toggle("active", tab === 'citas');
+      document.getElementById("tabReportes").classList.toggle("active", tab === 'reportes');
+      document.getElementById("panelUsuarios").style.display = tab === 'usuarios' ? '' : 'none';
+      document.getElementById("panelCitas").style.display   = tab === 'citas' ? '' : 'none';
+      document.getElementById("panelReportes").style.display = tab === 'reportes' ? '' : 'none';
+    }
+    document.getElementById('displayYear').textContent = new Date().getFullYear();
+
+    // ========== AJUSTE CERRAR SESIÓN ==========
+    document.getElementById('logoutBtn').onclick = function() {
+      fetch('/SECLICA/public/api/logout.php', { method: 'POST' })
+        .finally(() => {
+          window.location.href = "index.html";
+        });
+    };
+    // ===========================================
+
+    // ================= USUARIOS CRUD ===================
+    const API_USUARIOS = "/SECLICA/public/api/usuarios.php";
+    let usuariosBD = [];
+    async function cargarUsuarios() {
+      const filtroRol = document.getElementById("filtroRol").value;
+      let tbody = document.querySelector("#tablaUsuarios tbody");
+      tbody.innerHTML = `<tr><td colspan="11">Cargando usuarios...</td></tr>`;
+      try {
+        let resp = await fetch(API_USUARIOS);
+        let data = await resp.json();
+        if (!data.success) throw new Error(data.error || "Error");
+        usuariosBD = data.data;
+        let filtrados = filtroRol ? usuariosBD.filter(u => u.rol === filtroRol) : usuariosBD;
+        if (!filtrados.length) {
+          tbody.innerHTML = `<tr><td colspan="11" style="color:#ba181b;">No hay usuarios registrados.</td></tr>`;
+        } else {
+          tbody.innerHTML = filtrados.map(u => `
+            <tr>
+              <td>${u.id}</td>
+              <td>${u.nombre}</td>
+              <td>${u.apellido}</td>
+              <td>${u.tipo_documento}</td>
+              <td>${u.identificacion}</td>
+              <td>${u.email}</td>
+              <td>${u.telefono}</td>
+              <td><span class="badge ${u.rol}">${u.rol.charAt(0).toUpperCase() + u.rol.slice(1)}</span></td>
+              <td>${u.estado}</td>
+              <td>${u.created_at}</td>
+              <td>
+                <button class="btn-sm btn-edit" onclick="editarUsuario(${u.id})"><i class="fa fa-pencil"></i></button>
+                <button class="btn-sm btn-del" onclick="eliminarUsuario(${u.id})"><i class="fa fa-trash"></i></button>
+              </td>
+            </tr>
+          `).join("");
+        }
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="11" style="color:#ba181b;">Error cargando usuarios.</td></tr>`;
+      }
+    }
+    cargarUsuarios();
+
+    function openModalUsuario(id = null) {
+      document.getElementById('formUsuario').reset();
+      document.getElementById('usuarioId').value = '';
+      document.getElementById('password').value = '';
+      document.getElementById('passwordGroup').style.display = "block";
+      document.getElementById('modalUsuarioLabel').textContent = id ? "Editar Usuario" : "Agregar Usuario";
+      if (id) {
+        let u = usuariosBD.find(x => x.id == id);
+        if (!u) return;
+        document.getElementById('usuarioId').value = u.id;
+        document.getElementById('nombre').value = u.nombre;
+        document.getElementById('apellido').value = u.apellido;
+        document.getElementById('tipo_documento').value = u.tipo_documento;
+        document.getElementById('identificacion').value = u.identificacion;
+        document.getElementById('correo').value = u.email;
+        document.getElementById('telefono').value = u.telefono;
+        document.getElementById('rol').value = u.rol;
+      }
+      $('#modalUsuario').modal('show');
+    }
+    function editarUsuario(id) { openModalUsuario(id); }
+    async function eliminarUsuario(id) {
+      if (confirm("¿Estás seguro de eliminar este usuario?")) {
+        try {
+          let resp = await fetch(API_USUARIOS, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: `id=${id}`
+          });
+          let data = await resp.json();
+          if (data.success) {
+            cargarUsuarios();
+          } else {
+            alert("No se pudo eliminar: " + data.error);
+          }
+        } catch (e) {
+          alert("Error eliminando usuario");
+        }
+      }
+    }
+    document.getElementById("formUsuario").onsubmit = async function(e){
+      e.preventDefault();
+      const id = document.getElementById('usuarioId').value;
+      const payload = {
+        nombre: document.getElementById('nombre').value.trim(),
+        apellido: document.getElementById('apellido').value.trim(),
+        tipo_documento: document.getElementById('tipo_documento').value.trim(),
+        identificacion: document.getElementById('identificacion').value.trim(),
+        email: document.getElementById('correo').value.trim(),
+        telefono: document.getElementById('telefono').value.trim(),
+        rol: document.getElementById('rol').value,
+        password: document.getElementById('password').value
+      };
+      let url = API_USUARIOS, method = "POST";
+      if (id) { payload.id = id; method = "PUT"; }
+      if (!payload.password && id) delete payload.password;
+      try {
+        let resp = await fetch(url, {
+          method,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        let data = await resp.json();
+        if (data.success) {
+          $('#modalUsuario').modal('hide');
+          cargarUsuarios();
+        } else {
+          alert(data.error || "Error al guardar");
+        }
+      } catch (e) { alert("Error al guardar usuario"); }
+    }
+    window.openModalUsuario = openModalUsuario;
+    window.editarUsuario = editarUsuario;
+    window.eliminarUsuario = eliminarUsuario;
+
+    // ================== CITAS ===================
+    async function cargarCitas() {
+      let tbody = document.querySelector("#tablaCitas tbody");
+      tbody.innerHTML = `<tr><td colspan="13">Cargando citas...</td></tr>`;
+      try {
+        let resp = await fetch("/SECLICA/public/api/citas.php");
+        let data = await resp.json();
+        if (!data.success) throw new Error(data.error || "Error");
+        if (!data.data.length) {
+          tbody.innerHTML = `<tr><td colspan="13" style="color:#ba181b;">No hay citas registradas.</td></tr>`;
+        } else {
+          tbody.innerHTML = data.data.map(c => `
+            <tr>
+              <td>${c.id}</td>
+              <td>${c.nombre}</td>
+              <td>${c.apellido}</td>
+              <td>${c.tipo_documento}</td>
+              <td>${c.numero_documento}</td>
+              <td>${c.correo}</td>
+              <td>${c.telefono}</td>
+              <td>${c.fecha}</td>
+              <td>${c.placa_vehiculo}</td>
+              <td>${c.servicio}</td>
+              <td>${c.descripcion_adicional || ""}</td>
+              <td>${c.estado}</td>
+              <td>${c.created_at}</td>
+            </tr>
+          `).join("");
+        }
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="13" style="color:#ba181b;">Error cargando citas.</td></tr>`;
+      }
+    }
+    cargarCitas();
+
+    // ============= REPORTES (Excel/Tabla preview) =============
+    const API_REPORTES = "/SECLICA/public/api/reportes.php";
+    document.getElementById('btn-ver').onclick = async function () {
+      const tipo = document.getElementById('tipo_reporte').value;
+      const btnVer = this;
+      btnVer.disabled = true;
+      document.getElementById('flash').textContent = "Cargando reporte real...";
+      let th = document.querySelector('#tabla-reporte thead'),
+          tb = document.querySelector('#tabla-reporte tbody'),
+          titulo = document.getElementById('reporte-titulo'),
+          preview = document.getElementById('preview-box');
+      th.innerHTML = tb.innerHTML = "";
+      titulo.textContent = "";
+      preview.style.display = "none";
+      try {
+        let resp = await fetch(`${API_REPORTES}?tipo=${tipo}&formato=excel`);
+        if (!resp.ok) throw new Error("Error al obtener datos");
+        let text = await resp.text();
+        let filas = text.trim().split("\n");
+        if (filas.length < 2) {
+          document.getElementById('flash').textContent = "Sin datos para mostrar.";
+        } else {
+          let headers = filas[0].split(";");
+          th.innerHTML = "<tr>" + headers.map(h=>`<th>${h}</th>`).join("") + "</tr>";
+          tb.innerHTML = filas.slice(1).map(fila => {
+            let cols = fila.split(";");
+            return "<tr>" + cols.map(c=>`<td>${c}</td>`).join("") + "</tr>";
+          }).join("");
+          titulo.textContent = tipo.charAt(0).toUpperCase() + tipo.slice(1);
+          preview.style.display = "block";
+          document.getElementById('flash').textContent = "";
+        }
+      } catch (e) {
+        document.getElementById('flash').textContent = "Error cargando reporte.";
+      }
+      btnVer.disabled = false;
+    };
+    document.getElementById('btn-excel').onclick = () => {
+      window.open(`${API_REPORTES}?tipo=${document.getElementById('tipo_reporte').value}&formato=excel`, "_blank");
+    };
+
+    // Recargar usuarios/citas cuando cambies de tab
+    document.getElementById("tabUsuarios").onclick = function() { showTab('usuarios'); cargarUsuarios(); }
+    document.getElementById("tabCitas").onclick = function() { showTab('citas'); cargarCitas(); }
+    document.getElementById("tabReportes").onclick = function() { showTab('reportes'); }
+
+  </script>
+</body>
+</html>
