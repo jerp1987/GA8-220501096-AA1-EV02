@@ -241,6 +241,21 @@
     </div>
   </footer>
 
+
+  <script>
+    function volverModulo() {
+      // Lee el rol REAL del usuario autenticado
+      const user = JSON.parse(sessionStorage.getItem('auth_user') || '{}');
+      const rol = (user.rol || '').toLowerCase();
+      if(rol === "admin") {
+        window.location.href = "modulo_administrador.html";
+      } else if(rol === "empleado") {
+        window.location.href = "modulo_empleado.html";
+      } else {
+        window.location.href = "index.html";
+      }
+    }
+  </script>
   <!-- SCRIPTS -->
   <script src="js/jquery-3.4.1.min.js"></script>
   <script src="js/bootstrap.js"></script>

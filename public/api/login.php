@@ -17,7 +17,6 @@ try {
   $in = json_decode(file_get_contents("php://input"), true);
   if (!$in) json_error('Datos no recibidos o mal formato JSON.');
 
-  // Permitir 'email'
   $email = strtolower(trim($in['email'] ?? ''));
   $password = $in['password'] ?? '';
   $rol = strtolower(trim($in['rol'] ?? ''));
@@ -25,7 +24,10 @@ try {
   if (!$email || !$password) json_error('Correo y contraseña requeridos.');
 
   $pdo = db();
-  $q = $pdo->prepare("SELECT id, nombre, apellido, email, telefono, password_hash, rol, estado FROM usuarios WHERE email=? LIMIT 1");
+  $q = $pdo->prepare(
+    "SELECT id, nombre, apellido, tipo_documento, identificacion, email, telefono, password_hash, rol, estado 
+     FROM usuarios WHERE email=? LIMIT 1"
+  );
   $q->execute([$email]);
   $user = $q->fetch(PDO::FETCH_ASSOC);
 
@@ -37,19 +39,31 @@ try {
     json_error('Usuario inactivo.', 403);
   }
 
-  // Si el login es solo para admin/empleado y el rol no coincide, niega acceso
   if ($rol && $user['rol'] !== $rol) {
     json_error('Sin permisos para este módulo.', 403);
   }
 
-  // Limpia el hash antes de responder
+  // ===== CORRECTO: GUARDAR TODO EN $_SESSION['usuario'] =====
+  $_SESSION['usuario'] = [
+      'id'              => $user['id'],
+      'nombre'          => $user['nombre'],
+      'apellido'        => $user['apellido'],
+      'tipo_documento'  => $user['tipo_documento'] ?? '',
+      'identificacion'  => $user['identificacion'] ?? '',
+      'numero_documento'=> $user['identificacion'] ?? '',
+      'email'           => $user['email'],
+      'telefono'        => $user['telefono'],
+      'rol'             => $user['rol'],
+      'estado'          => $user['estado'],
+  ];
+
   unset($user['password_hash']);
 
   echo json_encode([
     'success'=>true,
-    'usuario'=>$user,
-    'rol'=>$user['rol'],
-    'id'=>$user['id'],
+    'usuario'=>$_SESSION['usuario'],
+    'rol'=>$_SESSION['usuario']['rol'],
+    'id'=>$_SESSION['usuario']['id'],
   ], JSON_UNESCAPED_UNICODE);
 
 } catch (Throwable $e) {

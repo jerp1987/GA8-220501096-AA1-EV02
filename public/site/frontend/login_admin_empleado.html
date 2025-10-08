@@ -140,11 +140,15 @@
     </div>
   </footer>
 
+<!-- ...[todo igual arriba]... -->
   <script>
     document.getElementById('displayYear').textContent = new Date().getFullYear();
 
     document.getElementById('formLogin').onsubmit = async function(e){
       e.preventDefault();
+      // Limpiar cualquier sesión previa (buena práctica)
+      sessionStorage.clear();
+
       let email = document.getElementById('email').value.trim();
       let password = document.getElementById('password').value;
       let rol = document.getElementById('rol').value;
@@ -152,23 +156,34 @@
       msgError.style.display = "none";
       msgError.textContent = "";
 
-      let resp = await fetch('/SECLICA/public/api/login.php', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ email, password, rol })
-      });
-      let data = await resp.json();
-      if(data.success){
-        if(data.rol === "admin"){
-          window.location.href = "modulo_administrador.html";
-        } else if(data.rol === "empleado"){
-          window.location.href = "modulo_empleado.html";
+      try {
+        let resp = await fetch('/SECLICA/public/api/login.php', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ email, password, rol })
+        });
+        let data = await resp.json();
+
+        if(data.success){
+          // Guarda datos esenciales en sessionStorage
+          sessionStorage.setItem('rol', data.rol); // admin o empleado
+          sessionStorage.setItem('user_name', data.nombre || data.usuario || email);
+
+          // Redirecciona según el rol
+          if(data.rol === "admin"){
+            window.location.href = "modulo_administrador.html";
+          } else if(data.rol === "empleado"){
+            window.location.href = "modulo_empleado.html";
+          } else {
+            msgError.textContent = "Rol inválido.";
+            msgError.style.display = "block";
+          }
         } else {
-          msgError.textContent = "Rol inválido.";
+          msgError.textContent = data.error || "Error al iniciar sesión";
           msgError.style.display = "block";
         }
-      } else {
-        msgError.textContent = data.error || "Error al iniciar sesión";
+      } catch(err) {
+        msgError.textContent = "Error de red o del servidor";
         msgError.style.display = "block";
       }
     }

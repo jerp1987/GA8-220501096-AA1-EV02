@@ -30,6 +30,7 @@
       <img src="images/hero-bg.jpg" alt="">
     </div>
     <!-- HEADER INICIO --> 
+     
     <header class="header_section">
       <div class="header_top">
         <div class="container-fluid header_top_container">
@@ -59,11 +60,10 @@
                 <li class="nav-item active"><a class="nav-link" href="index.html">INICIO <span class="sr-only">(actual)</span></a></li>
                 <li class="nav-item"><a class="nav-link" href="servicios.html">SERVICIOS</a></li>
                 <li class="nav-item"><a class="nav-link" href="equipo.html">EQUIPO</a></li>
-                <li class="nav-item"><a class="nav-link" href="citas.html">CITAS</a></li>
-                <li class="nav-item"><a class="nav-link" href="agendar_citas.html">AGENDAR CITA</a></li>
+                <!-- Acceso obligatorio antes de agendar -->
+                <li class="nav-item"><a class="nav-link" href="acceso.html">AGENDAR CITA</a></li>
                 <li class="nav-item"><a class="nav-link" href="cancelar_citas.html">CANCELAR CITA</a></li>
                 <li class="nav-item"><a class="nav-link" href="acceso.html">REGISTRO / ACCESO</a></li>
-                <li class="nav-item d-flex align-items-center"></li>
                 <li class="nav-item"><a class="nav-link" href="contacto.html">CONTACTO</a></li>
               </ul>
             </div>
@@ -285,46 +285,47 @@
   </section>
  
   <!-- info section (descripción SECLICA + botón centrado) -->
-  <section class="info_section mt-4 mb-0" style="background:#53b597; border-radius:18px 18px 0 0; padding-top:32px; padding-bottom:32px;">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12 text-center">
-          <span class="navbar-brand" style="font-size:2.2em; color:#F7B500; font-weight:700; letter-spacing:2px; margin-bottom:8px; display:inline-block;">
-            SECLICA
-          </span>
-          <p class="mt-2" style="font-size:1.13em; color:#fff; margin-bottom:1.5em;">
-            Somos una empresa prestadora de servicios especializados en mecánica 
-            de motocicletas de 2T y 4T en Bogotá.<br>
-            Presentamos a nuestros clientes un portafolio que abarca todo lo relacionado 
-            con los principales sistemas: inyección, lubricación, alimentación, dirección, 
-            frenos, transmisión y refrigeración.
-          </p>
-          <!-- Botón de acceso admin/empleado centrado -->
-          <a href="login_admin_empleado.html"
-             class="btn btn-outline-success btn-sm mb-4"
-             style="font-size:1.09em; border-width:2px; padding:8px 24px; font-weight:600;">
-            <i class="fa fa-user-shield"></i> Iniciar sesión Admin/Empleado
-          </a>
+<section class="info_section mt-4 mb-0" style="background:#53b597; border-radius:18px 18px 0 0; padding-top:32px; padding-bottom:32px;">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <span class="navbar-brand" style="font-size:2.2em; color:#F7B500; font-weight:700; letter-spacing:2px; margin-bottom:8px; display:inline-block;">
+              SECLICA
+            </span>
+            <p class="mt-2" style="font-size:1.13em; color:#fff; margin-bottom:1.5em;">
+              Somos una empresa prestadora de servicios especializados en mecánica 
+              de motocicletas de 2T y 4T en Bogotá.<br>
+              Presentamos a nuestros clientes un portafolio que abarca todo lo relacionado 
+              con los principales sistemas: inyección, lubricación, alimentación, dirección, 
+              frenos, transmisión y refrigeración.
+            </p>
+            <!-- Botón de acceso admin/empleado centrado -->
+            <a href="login_admin_empleado.html"
+               class="btn btn-outline-success btn-sm mb-4"
+               style="font-size:1.09em; border-width:2px; padding:8px 24px; font-weight:600;">
+              <i class="fa fa-user-shield"></i> Iniciar sesión Admin/Empleado
+            </a>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Footer original del template (con año dinámico) -->
-  <footer class="footer_section" style="margin-top:-12px;">
-    <div class="container text-center">
-      <p>
-        &copy; <span id="displayYear"></span> All Rights Reserved By
-        <a href="https://html.design/">Free Html Templates</a>
-      </p>
-    </div>
-  </footer>
+    <!-- Footer -->
+    <footer class="footer_section" style="margin-top:-12px;">
+      <div class="container text-center">
+        <p>
+          &copy; <span id="displayYear"></span> All Rights Reserved By
+          <a href="https://html.design/">Free Html Templates</a>
+        </p>
+      </div>
+    </footer>
 
-  <!-- SCRIPTS NECESARIOS -->
-  <script src="js/jquery-3.4.1.min.js"></script>
-  <script src="js/bootstrap.js"></script>
-  <script>
-    document.getElementById('displayYear').textContent = new Date().getFullYear();
-  </script>
+    <!-- SCRIPTS NECESARIOS -->
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script>
+      document.getElementById('displayYear').textContent = new Date().getFullYear();
+    </script>
+  </div>
 </body>
 </html>
