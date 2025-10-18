@@ -5,17 +5,39 @@ header('Content-Type: application/json; charset=utf-8');
 require_once __DIR__ . '/../../src/config/conexion.php';
 $pdo = db();
 
-switch($_SERVER['REQUEST_METHOD']) {
+// Función para obtener datos de la petición, compatible con JSON y form-data
+function getRequestData() {
+    $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+    if (stripos($contentType, 'application/json') !== false) {
+        $data = json_decode(file_get_contents("php://input"), true);
+        return is_array($data) ? $data : [];
+    } else {
+        // Para x-www-form-urlencoded o form-data (HTML forms)
+        parse_str(file_get_contents("php://input"), $vars);
+        return !empty($vars) ? $vars : $_POST;
+    }
+}
 
-    // 1. LISTAR USUARIOS
+switch ($_SERVER['REQUEST_METHOD']) {
+
+    // 1. LISTAR USUARIOS (con filtro por rol opcional)
     case 'GET':
-        $q = $pdo->query("SELECT id, nombre, apellido, tipo_documento, identificacion, email, telefono, rol, estado, created_at FROM usuarios ORDER BY id DESC");
-        echo json_encode(['success'=>true, 'data'=>$q->fetchAll(PDO::FETCH_ASSOC)]);
+        $rol = isset($_GET['rol']) ? trim($_GET['rol']) : '';
+        $sql = "SELECT id, nombre, apellido, tipo_documento, identificacion, email, telefono, rol, estado, created_at FROM usuarios";
+        $params = [];
+        if ($rol && strtolower($rol) !== 'todos') {
+            $sql .= " WHERE rol = ?";
+            $params[] = $rol;
+        }
+        $sql .= " ORDER BY id DESC";
+        $q = $pdo->prepare($sql);
+        $q->execute($params);
+        echo json_encode(['success' => true, 'data' => $q->fetchAll(PDO::FETCH_ASSOC)]);
         break;
 
     // 2. REGISTRAR USUARIO
     case 'POST':
-        $data = json_decode(file_get_contents("php://input"), true);
+        $data = getRequestData();
 
         // Validación de campos requeridos
         $required = ['nombre','apellido','tipo_documento','identificacion','telefono','email','password','rol'];
@@ -27,38 +49,50 @@ switch($_SERVER['REQUEST_METHOD']) {
             }
         }
 
-        // Email único
-        $existe = $pdo->prepare("SELECT id FROM usuarios WHERE email=?");
-        $existe->execute([$data['email']]);
-        if ($existe->fetch()) {
+        // Validar email único
+        $existeEmail = $pdo->prepare("SELECT id FROM usuarios WHERE email=?");
+        $existeEmail->execute([$data['email']]);
+        if ($existeEmail->fetch()) {
             http_response_code(409);
-            echo json_encode(['success'=>false, 'error'=>'El email ya está registrado']);
+            echo json_encode(['success'=>false, 'error'=>'El correo electrónico ya está registrado']);
             exit;
         }
 
-        $hash = password_hash($data['password'], PASSWORD_DEFAULT);
+        // Validar documento único
+        $docUnico = $pdo->prepare("SELECT id FROM usuarios WHERE tipo_documento=? AND identificacion=?");
+        $docUnico->execute([$data['tipo_documento'], $data['identificacion']]);
+        if ($docUnico->fetch()) {
+            http_response_code(409);
+            echo json_encode(['success'=>false, 'error'=>'El documento ya está registrado']);
+            exit;
+        }
 
-        $s = $pdo->prepare("INSERT INTO usuarios 
-            (nombre, apellido, tipo_documento, identificacion, telefono, email, password_hash, rol, estado, created_at) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'activo', NOW())");
-
-        $s->execute([
-            $data['nombre'],
-            $data['apellido'],
-            $data['tipo_documento'],
-            $data['identificacion'],
-            $data['telefono'],
-            $data['email'],
-            $hash,
-            $data['rol']
-        ]);
-
-        echo json_encode(['success'=>true, 'message'=>'Usuario creado exitosamente']);
+        // Intentar insertar y capturar errores
+        try {
+            $hash = password_hash($data['password'], PASSWORD_DEFAULT);
+            $s = $pdo->prepare("INSERT INTO usuarios 
+                (nombre, apellido, tipo_documento, identificacion, telefono, email, password_hash, rol, estado, created_at) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'activo', NOW())");
+            $s->execute([
+                $data['nombre'],
+                $data['apellido'],
+                $data['tipo_documento'],
+                $data['identificacion'],
+                $data['telefono'],
+                $data['email'],
+                $hash,
+                $data['rol']
+            ]);
+            echo json_encode(['success'=>true, 'message'=>'Usuario creado exitosamente']);
+        } catch (PDOException $e) {
+            http_response_code(500);
+            echo json_encode(['success'=>false, 'error'=>'No se pudo registrar el usuario. Intente más tarde.']);
+        }
         break;
 
     // 3. ACTUALIZAR USUARIO
     case 'PUT':
-        $data = json_decode(file_get_contents("php://input"), true);
+        $data = getRequestData();
         if (
             !isset($data['id']) || !$data['id'] ||
             !isset($data['nombre']) || !$data['nombre'] ||
@@ -78,9 +112,18 @@ switch($_SERVER['REQUEST_METHOD']) {
         $check->execute([$data['email'], $data['id']]);
         if ($check->fetch()) {
             http_response_code(409);
-            echo json_encode(['success'=>false, 'error'=>'El email ya está en uso']);
+            echo json_encode(['success'=>false, 'error'=>'El correo electrónico ya está en uso']);
             exit;
         }
+        // ¿Cambió el documento? Validar único
+        $checkDoc = $pdo->prepare("SELECT id FROM usuarios WHERE tipo_documento=? AND identificacion=? AND id<>?");
+        $checkDoc->execute([$data['tipo_documento'], $data['identificacion'], $data['id']]);
+        if ($checkDoc->fetch()) {
+            http_response_code(409);
+            echo json_encode(['success'=>false, 'error'=>'El documento ya está en uso']);
+            exit;
+        }
+        // Si viene password, actualiza, si no, déjala igual
         if (!empty($data['password'])) {
             $hash = password_hash($data['password'], PASSWORD_DEFAULT);
             $s = $pdo->prepare("UPDATE usuarios SET nombre=?, apellido=?, tipo_documento=?, identificacion=?, telefono=?, email=?, password_hash=?, rol=? WHERE id=?");
@@ -113,8 +156,8 @@ switch($_SERVER['REQUEST_METHOD']) {
 
     // 4. ELIMINAR USUARIO
     case 'DELETE':
-        parse_str(file_get_contents("php://input"), $del_vars);
-        $id = $del_vars['id'] ?? null;
+        $data = getRequestData();
+        $id = $data['id'] ?? null;
 
         if (!$id) {
             http_response_code(400);
@@ -152,3 +195,4 @@ switch($_SERVER['REQUEST_METHOD']) {
         echo json_encode(['success'=>false, 'error'=>'Método no soportado']);
         break;
 }
+?>

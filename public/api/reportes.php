@@ -44,6 +44,17 @@ if ($tipo === "usuarios") {
     exit;
 }
 
+// ---- RESPUESTA JSON para Postman/API ----
+if ($formato === "json") {
+    header('Content-Type: application/json');
+    echo json_encode([
+        "success" => true,
+        "headers" => $headers,
+        "data" => $rows
+    ]);
+    exit;
+}
+
 // ---- Generar Excel (CSV) ----
 if ($formato === "excel") {
     $csv = implode(";", $headers) . "\n";
@@ -77,7 +88,7 @@ if ($formato === "pdf") {
     exit;
 }
 
-// Si no es ninguno de los dos formatos
+// Si no es ninguno de los formatos
 http_response_code(400);
 echo "Formato no soportado.";
 exit;

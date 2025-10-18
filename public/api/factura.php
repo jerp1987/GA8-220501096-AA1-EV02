@@ -16,9 +16,54 @@ $stmt = $pdo->prepare(
 $stmt->execute([$id]);
 $f = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if (!$f) { echo "Factura no encontrada"; exit; }
-?>
+if (!$f) {
+    // Responde igual en JSON o HTML si la factura no existe
+    if (
+        isset($_SERVER['HTTP_ACCEPT']) &&
+        strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false
+    ) {
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode([
+            "success" => false,
+            "error" => "Factura no encontrada"
+        ]);
+        exit;
+    } else {
+        echo "Factura no encontrada";
+        exit;
+    }
+}
 
+// --- RESPUESTA EN JSON SI SE SOLICITA ---
+if (
+    isset($_SERVER['HTTP_ACCEPT']) &&
+    strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false
+) {
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode([
+        "success" => true,
+        "factura" => [
+            "id" => $f['factura_id'],
+            "cliente" => $f['nombre'] . " " . $f['apellido'],
+            "tipo_documento" => $f['tipo_documento'],
+            "numero_documento" => $f['numero_documento'],
+            "correo" => $f['correo'],
+            "telefono" => $f['telefono'],
+            "placa" => $f['placa_vehiculo'],
+            "fecha_cita" => $f['fecha'],
+            "servicio" => $f['servicio'],
+            "detalle" => $f['descripcion_adicional'] ?: $f['descripcion'],
+            "subtotal" => $f['subtotal'],
+            "iva" => $f['iva'],
+            "total" => $f['total'],
+            "estado" => $f['estado_factura']
+        ]
+    ]);
+    exit;
+}
+
+// --- RESPUESTA EN HTML PARA NAVEGADOR ---
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>

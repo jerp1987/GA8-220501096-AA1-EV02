@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-09-2025 a las 23:47:58
+-- Tiempo de generación: 18-10-2025 a las 10:19:18
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -31,6 +31,7 @@ CREATE TABLE `cancelaciones` (
   `id` int(11) NOT NULL,
   `cita_id` int(11) NOT NULL,
   `motivo` text NOT NULL,
+  `cancelado_por` varchar(60) DEFAULT NULL,
   `fecha_cancelacion` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -38,12 +39,11 @@ CREATE TABLE `cancelaciones` (
 -- Volcado de datos para la tabla `cancelaciones`
 --
 
-INSERT INTO `cancelaciones` (`id`, `cita_id`, `motivo`, `fecha_cancelacion`) VALUES
-(1, 1, 'siniestro del vehiculo', '2025-09-18 02:28:52'),
-(2, 2, 'siniestro vehiculo perdida total', '2025-09-19 23:31:04'),
-(3, 4, 'cancelacion cliente', '2025-09-20 15:33:55'),
-(4, 3, 'sinistro vehiculo', '2025-09-20 15:35:25'),
-(5, 5, 'cancela cliente', '2025-09-22 21:35:39');
+INSERT INTO `cancelaciones` (`id`, `cita_id`, `motivo`, `cancelado_por`, `fecha_cancelacion`) VALUES
+(26, 42, 'personales', 'dider romero', '2025-10-07 20:11:40'),
+(27, 41, 'prueba', 'dider romero', '2025-10-07 20:15:12'),
+(28, 46, 'Cliente no puede asistir', 'empleado', '2025-10-17 03:59:08'),
+(29, 47, 'Cancelación por parte del cliente', 'empleado', '2025-10-18 00:22:23');
 
 -- --------------------------------------------------------
 
@@ -72,13 +72,13 @@ CREATE TABLE `citas` (
 --
 
 INSERT INTO `citas` (`id`, `nombre`, `apellido`, `tipo_documento`, `numero_documento`, `correo`, `telefono`, `fecha`, `placa_vehiculo`, `servicio`, `descripcion_adicional`, `estado`, `created_at`) VALUES
-(1, 'jhonn', 'romero', 'CC', '1026553655', 'jhon@romero.com', '3008765432', '2025-09-19', 'KXM42D', 'Sistema Electrónico y eléctrico', '', 'cancelada', '2025-09-18 02:19:38'),
-(2, 'jhonn', 'romero', 'CC', '1206553655', 'jhonromero@gmail.com', '3004834321', '2025-09-15', 'KXM43A', 'Sincronización', '', 'cancelada', '2025-09-19 23:27:58'),
-(3, 'juan', 'peña', 'CC', '101499207', 'juan@gmail.com', '3009876543', '2025-09-19', 'LSD56T', 'Sistema Lubricación', '', 'cancelada', '2025-09-19 23:51:23'),
-(4, 'pedro', 'jaimes', 'CC', '12345678900', 'pedrojaimes@gmail.com', '3214567800', '2025-09-18', 'SLO32S', 'Reparación Motor', '', 'cancelada', '2025-09-20 00:04:26'),
-(5, 'citaid', 'emphtml', 'CC', '10002345678', 'citaid@emphtml.com', '7031809', '2025-09-20', 'SND84B', 'Sistema Eléctrico', '', 'cancelada', '2025-09-20 12:33:32'),
-(6, 'jhonn', 'romero', 'CC', '1026553655', 'jhonnromero@gmail.com', '3507348436', '2025-09-23', 'MSR67W', 'Sincronización', '', 'pendiente', '2025-09-22 21:22:07'),
-(7, 'cliente formulario', 'cliente html', 'CC', '123456789', 'cliente@clientehtml.com', '30001234567', '2025-09-25', 'NSA84D', 'Mecánica Rápida', 'cita cliente', 'pendiente', '2025-09-24 13:06:10');
+(41, 'dider', 'romero', 'CC', '1023676453', 'didier@romero.com', '3227655432', '2025-10-08', 'KKK21A', 'Scanner OBD1/OBD2', 'preuba formualrio citas usuario....', 'cancelada', '2025-10-07 19:52:38'),
+(42, 'dider', 'romero', 'CC', '1023676453', 'didier@romero.com', '3227655432', '2025-10-08', 'JJJ21A', 'Otros', 'cita modulo empleado seccion citas usuarios', 'cancelada', '2025-10-07 19:55:07'),
+(43, 'dider', 'romero', 'CC', '1023676453', 'didier@romero.com', '3227655432', '2025-10-08', 'SST09B', 'Reparación Motor', 'CITA CLIENTE', 'pendiente', '2025-10-07 20:22:33'),
+(44, 'dider', 'romero', 'CC', '1023676453', 'didier@romero.com', '3227655432', '2025-10-08', 'SSS21A', 'Sincronización', 'preuba cita empleado', 'pendiente', '2025-10-07 20:31:45'),
+(45, 'Admin', 'SECLICA', 'CC', '1234567890', 'admin@secllica.com', '3000000000', '2025-10-14', 'JJJ222', 'Sincronización', 'Agendada por empleado', 'pendiente', '2025-10-13 22:31:08'),
+(46, 'Juan', 'Pérez', 'CC', '1122334455', 'juanperez@email.com', '301234567', '2025-10-25', 'JPZ001', '2', 'Ajuste y engrase general', 'cancelada', '2025-10-17 03:55:29'),
+(47, 'Carlos', 'Pérez', 'CC', '1122331100', 'carlosprueba@email1.com', '3211234567', '2025-10-20', 'XYZ12C', 'Mantenimiento preventivo', 'prueba postman', 'cancelada', '2025-10-18 00:14:53');
 
 -- --------------------------------------------------------
 
@@ -102,14 +102,10 @@ CREATE TABLE `facturas` (
 --
 
 INSERT INTO `facturas` (`id`, `cliente_id`, `descripcion`, `subtotal`, `iva`, `total`, `estado`, `cita_id`) VALUES
-(4, 14, 'Mantenimiento general', 80000.00, 15200.00, 95200.00, 'pagada', NULL),
-(5, 16, 'Sincronización y revisión', 40000.00, 7600.00, 47600.00, 'pendiente', NULL),
-(8, 6, 'Reparación general', 80000.00, 15200.00, 95200.00, 'pagada', NULL),
-(10, 6, 'Servicio General', 80000.00, 15200.00, 95200.00, 'pagada', NULL),
-(11, 5, 'mano de abora y insumos', 1200000.00, 228000.00, 1428000.00, 'pagada', 5),
-(15, 5, 'mano de obra', 250000.00, 47500.00, 297500.00, 'pagada', 5),
-(16, 6, 'Sincronización', 80000.00, 15200.00, 95200.00, 'pendiente', 6),
-(17, 6, 'mano de obra, sincronizacion', 135000.00, 25650.00, 160650.00, 'pagada', 6);
+(89, 49, 'mano de obra', 150000.00, 28500.00, 178500.00, 'pagada', 42),
+(90, 49, 'mano de obra', 125000.00, 23750.00, 148750.00, 'pagada', 43),
+(91, 49, 'mano de abra', 125000.00, 23750.00, 148750.00, 'pagada', 44),
+(92, 37, 'Sincronización general del sistema', 150000.00, 28500.00, 178500.00, 'pagada', 45);
 
 -- --------------------------------------------------------
 
@@ -132,7 +128,12 @@ CREATE TABLE `mensajes_contacto` (
 
 INSERT INTO `mensajes_contacto` (`id`, `nombre`, `correo`, `telefono`, `mensaje`, `fecha_envio`) VALUES
 (1, 'jhonn romero', 'jhonnhtml@contacto.com', '3005768790', 'felitaciones este proyecto esta tomando forma...', '2025-09-18 03:00:05'),
-(2, 'jhonn romero', 'jhonn@romero.com', '3008765432', 'reclamacion por garantia de trabajo realizado en dias pasados se presenta queja por malos procedimiento', '2025-09-24 16:13:19');
+(2, 'jhonn romero', 'jhonn@romero.com', '3008765432', 'reclamacion por garantia de trabajo realizado en dias pasados se presenta queja por malos procedimiento', '2025-09-24 16:13:19'),
+(3, 'clinete mensaje prueba', 'clienteprueba@mensaje.com', '30007654311', 'mesaje prueba sistema seclica recepcion en bandeja mensajes de bd seclica y modulos admin y empleado.', '2025-09-25 19:19:46'),
+(4, 'prueba html ccontacto', 'prueba@htmlccontacto.com', '3001122222222', 'prueba de mansaje formulariohtml', '2025-09-30 03:55:53'),
+(5, 'fgdfgdfg', 'dfdfdf@jfhfjdh.com', '84387474359845', 'kdjdchdbbbvbcvbhchvbcbv', '2025-10-07 13:29:48'),
+(6, 'Juan Perez', 'juanperez@email.com', '3001234567', '¡Buen servicio, felicitaciones![mensaje desde postman]', '2025-10-18 00:34:02'),
+(7, 'Juan Perez', 'juanperez@email.com', '3001234567', '¡Buen servicio, felicitaciones![mensaje desde wen htm]', '2025-10-18 00:36:31');
 
 -- --------------------------------------------------------
 
@@ -154,7 +155,10 @@ CREATE TABLE `respuestas_contacto` (
 
 INSERT INTO `respuestas_contacto` (`id`, `mensaje_id`, `respuesta`, `fecha_respuesta`, `respondido_por`) VALUES
 (1, 2, 'lo sentimos en este moneto no podemos responder esa solicitud graciias por comunicarte con nosotro hasta pronto¡¡', '2025-09-24 17:38:27', 'Empleado'),
-(2, 1, 'gracias por tu mensaje, estamos trabajndo para seguir mejorando para sarte una experiencia satifactoria gracias¡', '2025-09-24 17:44:34', 'Empleado');
+(2, 1, 'gracias por tu mensaje, estamos trabajndo para seguir mejorando para sarte una experiencia satifactoria gracias¡', '2025-09-24 17:44:34', 'Empleado'),
+(3, 3, 'mesaje prueba sistema seclica recepcion en bandeja mensajes de bd seclica y modulo empleado.respuesta', '2025-10-02 22:14:04', 'Empleado'),
+(4, 5, 'Muchas gracias por contactarnos, su solicitud fue atendida.', '2025-10-11 04:37:06', 'Jhonn Edison'),
+(5, 4, 'Gracias por contactarnos, responderemos pronto.', '2025-10-17 04:36:34', 'Empleado');
 
 -- --------------------------------------------------------
 
@@ -182,13 +186,22 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `nombre`, `apellido`, `tipo_documento`, `identificacion`, `email`, `telefono`, `password_hash`, `rol`, `estado`, `created_at`, `updated_at`) VALUES
-(5, 'jhonn jairo', 'romero gonzalez', 'CC', '1026553000', 'jhonactualizado@romero.com', '3008765432', '$2y$10$dSSnCtletxoQ0tIPL/DCdul3gj5u8KmJC4wqXjvHP1BoC561OD81a', 'cliente', 'activo', '2025-09-01 19:14:59', '2025-09-23 03:58:01'),
-(6, 'jhonn actualizado', 'romero admin', 'CC', '123456678900', 'jhonn@romero.com', '30098765534', '$2y$10$BN8mOv1D9zoZZOBCmuyD7.ZsMFHlwvNFyuESacCq9OEMzKUuiS7Ua', 'cliente', 'activo', '2025-09-01 19:29:49', '2025-09-23 04:14:46'),
-(14, 'cliente', 'cliente', 'CC', '123456789', 'cliente@clientehtml.com', '30001234567', '$2y$10$46y5uM9Q2QDOpvpsOtV9tu..YXirPO9CU2mHK6vYcXJzJBQITdkUS', 'cliente', 'activo', '2025-09-10 18:47:02', NULL),
-(16, 'edison', 'peña', 'CC', '101499207', 'edisoncliente@html.com', '3004833087', '$2y$10$UECWHPbX38CDn/EJeS7Ea.rhVzJ9HTBLPiV1uXbqyo1puqCKODdJa', 'cliente', 'activo', '2025-09-18 06:54:50', NULL),
+(6, 'jhonn actualizado', 'romero admin', 'CC', '123456678900', 'jhonn@romero.com', '30098765534', '$2y$10$ec5rgeZOx71beexv19J8Yerk/4NJpjdax3nM6raR1g5iHm9AtIBbS', 'cliente', 'activo', '2025-09-01 19:29:49', '2025-10-18 05:04:44'),
+(14, 'cliente', 'cliente', 'CC', '123456789', 'cliente@clientehtml.com', '30001234567', '$2y$10$wR485Mwd7Gp7eIQWuZdaiOaYh/K1AEanLRVY0mBS.Y.Tso8lXvoci', 'cliente', 'activo', '2025-09-10 18:47:02', '2025-10-18 05:04:50'),
+(16, 'edison', 'peña', 'CC', '101499207', 'edisoncliente@html.com', '3004833087', '$2y$10$MiGIXT/cQUl2ZXx.ZVsRpOW2zE4A00o5EGvUFrphREsIiR1V.5Aru', 'cliente', 'activo', '2025-09-18 06:54:50', '2025-10-18 05:05:01'),
 (24, 'Admin', 'SECLICA', 'CC', '222333444', 'adminhtml@secilica.com', '3000000000', '$2y$10$3F1HQ/0QaImIsY2.QA9dLuycO8i2PtBJ5mDWwT8Mbw2c9vK6A3J/i', 'admin', 'activo', '2025-09-19 03:58:59', NULL),
-(26, 'Adminhtml1', 'SECLICA', 'CC', '1234', 'adminhtml1@secilica.com', '3000000000', '$2y$10$6dqHSb9HL9mSd8NHB8gb5.kg8Od2Iw/DK.DX/15jDcQd29VZbWblW', 'admin', 'activo', '2025-09-19 04:37:48', '2025-09-23 04:06:38'),
-(27, 'Empleado', 'Prueba', 'CC', '1020546890', 'empleado@seclila.com', '3001234567', '$2y$10$dlWq1iJ/8J8piKz8SG30EOlg3xH6ylPNtKJnePmOFrrv3FvLaTmG.', 'empleado', 'activo', '2025-09-20 02:59:16', '2025-09-24 17:59:55');
+(27, 'Empleado', 'Prueba', 'CC', '1020546890', 'empleado@seclila.com', '3001234567', '$2y$10$xIPvZWLH.HUinWdrsDVbi.vQ6iODA57axZIIsfzVWYZrrKCkO0Im6', 'empleado', 'activo', '2025-09-20 02:59:16', '2025-10-17 09:58:11'),
+(31, 'yarledys', 'paternina', 'CC', '1000111444777', 'yarledys@gmail.com', '3013458709', '$2y$10$/3g/tDujXPT5kTssnbwapupw45KopWP1Atl8duSGs4i6/Y34g6qlu', 'empleado', 'activo', '2025-09-25 23:22:55', NULL),
+(34, 'agendar cita2', 'empleado2', 'CC', '12003300888', 'agendarcita2@empleado2.com', '3210003217', '$2y$10$t7lKbnDdBnzdKl8MiwAx9exs5Hi4NJsnavshjoeRP/jQNd24kmuZa', 'cliente', 'activo', '2025-09-30 08:17:17', '2025-10-18 05:05:06'),
+(37, 'Admin', 'SECLICA', 'CC', '1234567890', 'admin@secllica.com', '3000000000', '$2y$10$gQNV8lo8FM0qgJyrl4D9X.t9qxZHIBnD8P03PyOMqGOsB5kp3T1jK', 'admin', 'activo', '2025-09-30 09:12:28', '2025-10-03 01:50:43'),
+(39, 'Admin', 'SECLICA', 'CC', '9999999888', 'admin3@secllica.com', '3000000022', '$2y$10$VpI7yGNeONga06SwKSe4HeZ2qrUXZ6KHOc/ekk5gV6XTWotS3dy2S', 'admin', 'activo', '2025-09-30 09:19:32', '2025-10-03 01:50:32'),
+(42, 'Jhonn', 'Admin', 'CC', '1234567111', 'jhonn@gmail.com', '3001234567', '$2y$10$9/fgHODuplXalJ0qqmzZ0ewbaSE0UPTWEqOhGWeSiQmIYuxu9GmB2', 'admin', 'activo', '2025-10-01 19:18:30', '2025-10-03 01:50:56'),
+(45, 'Jhonn', 'Admin', 'CC', '12345110045', 'jhonnromero@gmail.com', '3509897654', '$2y$10$UXbn83SqzTHDMUw4R99xOOyFQbg.abva8w.SH2vvxjgvlZyw79PtK', 'admin', 'activo', '2025-10-03 01:43:41', NULL),
+(48, 'cita4', 'modulo empleado', 'CC', '1000444333000', 'cita4@moduloempleado.com', '30090080091', '$2y$10$RsYU.kaulHdPYjbhYsMayOIIG9fusuqKSNI0isFvrgj.YDcT1cVsS', 'cliente', 'activo', '2025-10-03 03:16:12', '2025-10-18 05:05:11'),
+(49, 'dider', 'romero', 'CC', '1023676453', 'didier@romero.com', '3227655432', '$2y$10$IDT2wWi2WE49CaK0nRIhU.l4tKFwtHGNXFO.y9faafdtfYUrCnq2i', 'cliente', 'activo', '2025-10-03 03:53:36', '2025-10-18 05:05:18'),
+(53, 'Juan', 'Pérez', 'CC', '1122334455', 'juanperez@email.com', '3001234567', '$2y$10$cIG5P9pCfAgreOViRLeSuuyZ27b4FmpngbfV5rXMLhcPNOWZOp.xu', 'cliente', 'activo', '2025-10-11 10:15:26', '2025-10-18 05:05:23'),
+(54, 'empleado@seclica.com', 'empleado@seclica.com', 'CC', '234167890', 'empleado@seclica.com', '32100982345', '$2y$10$Gj6OpoDWWVss.IYQPO0sWuLWgL09KkRmFwUP7w9YXv3IhNFDztDdS', 'empleado', 'activo', '2025-10-17 09:59:30', NULL),
+(56, 'Carlos', 'Pérez', 'CC', '1122331100', 'carlosprueba@email.com', '3211234567', '$2y$10$4DHtbSbULV.DBVFlWGfKN.YRVmkI4DgWn/Xt22addJ0vh9JaLm84a', 'cliente', 'activo', '2025-10-18 04:48:47', '2025-10-18 05:05:28');
 
 --
 -- Índices para tablas volcadas
@@ -243,37 +256,37 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `cancelaciones`
 --
 ALTER TABLE `cancelaciones`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT de la tabla `citas`
 --
 ALTER TABLE `citas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT de la tabla `facturas`
 --
 ALTER TABLE `facturas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=93;
 
 --
 -- AUTO_INCREMENT de la tabla `mensajes_contacto`
 --
 ALTER TABLE `mensajes_contacto`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `respuestas_contacto`
 --
 ALTER TABLE `respuestas_contacto`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- Restricciones para tablas volcadas

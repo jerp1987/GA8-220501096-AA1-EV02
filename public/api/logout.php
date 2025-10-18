@@ -12,11 +12,16 @@ if (ini_get("session.use_cookies")) {
 }
 session_destroy();
 
-// Si el logout se hace desde un fetch, puedes devolver JSON, pero si es por navegador, redirecciona
-if (php_sapi_name() === 'cli' || (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest')) {
-    echo json_encode(['success'=>true, 'message'=>'Sesión cerrada']);
+// Detecta si espera JSON por el header Accept (Postman, fetch, etc)
+$accept = $_SERVER['HTTP_ACCEPT'] ?? '';
+$is_json = stripos($accept, 'application/json') !== false;
+
+if ($is_json) {
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode(['success'=>true, 'message'=>'Sesión cerrada correctamente.']);
     exit;
 } else {
+    // Redirección para navegación normal (desde un enlace/botón de la web)
     header("Location: /SECLICA/public/site/frontend/index.html");
     exit;
 }
